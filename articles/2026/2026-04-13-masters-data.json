@@ -1,0 +1,158 @@
+{
+  "tournament": "Masters Tournament",
+  "date": "2026-04-13",
+  "tour": "PGA Tour",
+  "course": "Augusta National Golf Club",
+  "winner": "Rory McIlroy",
+  "winner_score": "-12",
+  "leaderboard": [
+    {
+      "pos": "1",
+      "name": "Rory McIlroy",
+      "score": "-12",
+      "rounds": [
+        67,
+        65,
+        73,
+        71
+      ]
+    },
+    {
+      "pos": "2",
+      "name": "Scottie Scheffler",
+      "score": "-11",
+      "rounds": [
+        70,
+        74,
+        65,
+        68
+      ]
+    },
+    {
+      "pos": "T3",
+      "name": "Tyrrell Hatton",
+      "score": "-10",
+      "rounds": [
+        74,
+        66,
+        72,
+        66
+      ]
+    },
+    {
+      "pos": "T3",
+      "name": "Russell Henley",
+      "score": "-10",
+      "rounds": [
+        73,
+        71,
+        66,
+        68
+      ]
+    },
+    {
+      "pos": "T3",
+      "name": "Justin Rose",
+      "score": "-10",
+      "rounds": [
+        70,
+        69,
+        69,
+        70
+      ]
+    },
+    {
+      "pos": "T3",
+      "name": "Cameron Young",
+      "score": "-10",
+      "rounds": [
+        73,
+        67,
+        65,
+        73
+      ]
+    },
+    {
+      "pos": "T7",
+      "name": "Collin Morikawa",
+      "score": "-9",
+      "rounds": [
+        74,
+        69,
+        68,
+        68
+      ]
+    },
+    {
+      "pos": "T7",
+      "name": "Sam Burns",
+      "score": "-9",
+      "rounds": [
+        67,
+        71,
+        68,
+        73
+      ]
+    },
+    {
+      "pos": "T9",
+      "name": "Max Homa",
+      "score": "-8",
+      "rounds": [
+        72,
+        70,
+        71,
+        67
+      ]
+    },
+    {
+      "pos": "T9",
+      "name": "Xander Schauffele",
+      "score": "-8",
+      "rounds": [
+        70,
+        72,
+        70,
+        68
+      ]
+    }
+  ],
+  "cut_line": "+2",
+  "picks_for_next": {
+    "tournament": "RBC Heritage",
+    "course": "Harbour Town Golf Links",
+    "date": "2026-04-17",
+    "picks": [
+      {
+        "player": "Russell Henley",
+        "dg_course_fit": 4,
+        "dg_world_rank": 5,
+        "ev": 1.844
+      },
+      {
+        "player": "Collin Morikawa",
+        "dg_course_fit": 19,
+        "dg_world_rank": 9,
+        "ev": 1.614
+      },
+      {
+        "player": "Si Woo Kim",
+        "dg_course_fit": 10,
+        "dg_world_rank": 17,
+        "ev": 1.332
+      },
+      {
+        "player": "Alex Noren",
+        "dg_course_fit": 7,
+        "dg_world_rank": 22,
+        "ev": 1.217
+      },
+      {
+        "player": "Nick Taylor",
+        "dg_course_fit": 8,
+        "dg_world_rank": 41,
+        "ev": 0.863
+      }
+    ]
+  }
+}

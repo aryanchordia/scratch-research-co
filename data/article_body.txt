@@ -1,29 +1,3 @@
----
-title: "The Masters 2026: Back-to-Back"
-description: "Rory McIlroy becomes just the fourth player in history to win consecutive Masters titles — and from the ground, it felt nothing like the broadcast."
-date: 2026-04-13
-tournament: "The Masters"
-tour: "PGA Tour"
-course: "Augusta National Golf Club"
-winner: "Rory McIlroy"
-winnerScore: "-12"
-isMajor: true
-tags: ["major", "masters", "augusta", "pga-tour", "rory-mcilroy", "back-to-back"]
-picks:
-  - player: "Russell Henley"
-    result: "pending"
-  - player: "Collin Morikawa"
-    result: "pending"
-  - player: "Si Woo Kim"
-    result: "pending"
-  - player: "Alex Noren"
-    result: "pending"
-  - player: "Nick Taylor"
-    result: "pending"
-nextTournament: "RBC Heritage"
-nextTournamentDate: "2026-04-17"
-nextTournamentCourse: "Harbour Town Golf Links"
----
 The green jacket slipped over his shoulders for the second consecutive time, and even Augusta National — a place engineered to resist sentimentality — seemed to exhale. Rory McIlroy, the six-time major champion who completed the career Grand Slam here twelve months ago, came back and defended it. He is only the fourth man to win back-to-back Masters, after Jack Nicklaus, Nick Faldo, and Tiger Woods. The margin was a single stroke. It felt like less. It also felt like more.
 
 ## The Recap

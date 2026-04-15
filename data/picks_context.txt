@@ -1,0 +1,43 @@
+DataGolf Course Fit + World Ranking for Harbour Town Golf Links (RBC Heritage):
+  Russell Henley            CFit#  4  DGRank#  5  EV=1.844
+  Si Woo Kim                CFit# 10  DGRank# 17  EV=1.332
+  Alex Noren                CFit#  7  DGRank# 22  EV=1.217
+  Collin Morikawa           CFit# 19  DGRank#  9  EV=1.614
+  Tommy Fleetwood           CFit# 25  DGRank#  7  EV=1.716
+  Nick Taylor               CFit#  8  DGRank# 41  EV=0.863
+  Shane Lowry               CFit# 23  DGRank# 27  EV=1.145
+  Corey Conners             CFit# 16  DGRank# 45  EV=0.819
+  J.J. Spaun                CFit# 29  DGRank# 26  EV=1.148
+  Sepp Straka               CFit# 24  DGRank# 34  EV=1.032
+  Andrew Putnam             CFit#  1  DGRank# 72  EV=0.490
+  Jason Day                 CFit# 30  DGRank# 32  EV=1.057
+  Ryan Gerard               CFit# 28  DGRank# 36  EV=0.968
+  Matt McCarty              CFit# 17  DGRank# 56  EV=0.626
+  J.T. Poston               CFit# 12  DGRank# 65  EV=0.557
+
+Pure course fit top 25:
+  #  1 Andrew Putnam             (USA) adj=-0.0157
+  #  2 Brian Campbell            (USA) adj=-0.0080
+  #  3 Lucas Glover              (USA) adj=+0.0113
+  #  4 Russell Henley            (USA) adj=-0.0172
+  #  5 David Lipsky              (USA) adj=-0.0030
+  #  6 Chandler Blanchet         (USA) adj=+0.0108
+  #  7 Alex Noren                (SWE) adj=-0.0194
+  #  8 Nick Taylor               (CAN) adj=-0.0093
+  #  9 Brian Harman              (USA) adj=-0.0068
+  # 10 Si Woo Kim                (KOR) adj=-0.0027
+  # 11 Nico Echavarria           (COL) adj=-0.0024
+  # 12 J.T. Poston               (USA) adj=-0.0054
+  # 13 Sami Valimaki             (FIN) adj=-0.0037
+  # 14 Tom Hoge                  (USA) adj=+0.0089
+  # 15 Denny McCarthy            (USA) adj=-0.0139
+  # 16 Corey Conners             (CAN) adj=+0.0026
+  # 17 Matt McCarty              (USA) adj=-0.0102
+  # 18 Bud Cauley                (USA) adj=-0.0003
+  # 19 Collin Morikawa           (USA) adj=-0.0053
+  # 20 Sungjae Im                (KOR) adj=-0.0155
+  # 21 Billy Horschel            (USA) adj=-0.0044
+  # 22 Austin Smotherman         (USA) adj=+0.0128
+  # 23 Shane Lowry               (IRL) adj=-0.0019
+  # 24 Sepp Straka               (AUT) adj=-0.0046
+  # 25 Tommy Fleetwood           (ENG) adj=-0.0136
