@@ -3,48 +3,90 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
 const allArticles = await getCollection('articles');
-
-// Only articles that have picks AND a nextTournament (picks are always for the upcoming event)
-const weeksWithPicks = allArticles
-  .filter(a => a.data.picks && a.data.picks.length > 0 && a.data.nextTournament)
-  .sort((a, b) => {
-    // Sort by nextTournamentDate descending (most recent first)
-    const da = a.data.nextTournamentDate ? new Date(a.data.nextTournamentDate) : new Date(a.data.date);
-    const db = b.data.nextTournamentDate ? new Date(b.data.nextTournamentDate) : new Date(b.data.date);
-    return db.getTime() - da.getTime();
-  });
+const sorted = allArticles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const base = import.meta.env.BASE_URL;
 
 // Running record across all resolved picks
-let wins = 0, top5s = 0, top10s = 0, misses = 0, pending = 0;
-weeksWithPicks.forEach(article => {
+let wins = 0, top5s = 0, top10s = 0, misses = 0;
+sorted.forEach(article => {
   article.data.picks?.forEach(pick => {
-    if (pick.result === 'pending') { pending++; return; }
-    if (pick.result === 'win') { wins++; top5s++; top10s++; }
-    else if (pick.result === 'top5') { top5s++; top10s++; }
+    if (pick.result === 'pending') return;
+    if (pick.result === 'win')    { wins++; top5s++; top10s++; }
+    else if (pick.result === 'top5')  { top5s++; top10s++; }
     else if (pick.result === 'top10') { top10s++; }
-    else if (pick.result === 'miss') { misses++; }
+    else if (pick.result === 'miss')  { misses++; }
   });
 });
-const total = wins + top5s + misses + (top10s - top5s);
+const totalResolved = wins + misses + (top10s - wins);
 
-function resultLabel(result: string): string {
-  switch (result) {
-    case 'win':   return 'WIN';
-    case 'top5':  return 'TOP 5';
-    case 'top10': return 'TOP 10';
-    case 'top20': return 'TOP 20';
-    case 'miss':  return 'MISS';
-    case 'pending': return 'PENDING';
-    default: return result.toUpperCase();
-  }
+function resultLabel(result: string) {
+  const map: Record<string, string> = {
+    win: 'WIN', top5: 'TOP 5', top10: 'TOP 10', top20: 'TOP 20',
+    miss: 'MISS', pending: 'PENDING',
+  };
+  return map[result] ?? result.toUpperCase();
 }
 
-function formatDate(dateStr: string | undefined): string {
-  if (!dateStr) return '';
-  const d = new Date(dateStr + 'T12:00:00');
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+function formatDate(d: Date | string) {
+  const date = d instanceof Date ? d : new Date(String(d) + 'T12:00:00');
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// Build the full picks timeline:
+// Each article contributes two potential rows:
+//   1. The tournament it covered (e.g. The Masters) — always show, even if no picks
+//   2. The nextTournament picks it published (e.g. RBC Heritage) — only if picks exist
+// De-duplicate so nextTournament rows don't double up when that event's own article publishes.
+
+interface Row {
+  label: string;
+  date: string;
+  course?: string;
+  picks: typeof sorted[0]['data']['picks'];
+  articleId: string;
+  articleTitle: string;
+  isInaugural: boolean;
+}
+
+const rows: Row[] = [];
+const seenTournaments = new Set<string>();
+
+// Process newest-first
+for (const article of sorted) {
+  const hasPicks = article.data.picks && article.data.picks.length > 0;
+
+  // Row A: the nextTournament picks (if any)
+  if (hasPicks && article.data.nextTournament) {
+    const key = article.data.nextTournament.toLowerCase().trim();
+    if (!seenTournaments.has(key)) {
+      seenTournaments.add(key);
+      rows.push({
+        label: article.data.nextTournament,
+        date: article.data.nextTournamentDate ?? '',
+        course: article.data.nextTournamentCourse,
+        picks: article.data.picks,
+        articleId: article.id,
+        articleTitle: article.data.title,
+        isInaugural: false,
+      });
+    }
+  }
+
+  // Row B: the covered tournament itself — show if we haven't shown it yet
+  const coveredKey = article.data.tournament.toLowerCase().trim();
+  if (!seenTournaments.has(coveredKey)) {
+    seenTournaments.add(coveredKey);
+    rows.push({
+      label: article.data.tournament,
+      date: formatDate(article.data.date),
+      course: article.data.course,
+      picks: hasPicks ? undefined : undefined, // no picks FOR this tournament
+      articleId: article.id,
+      articleTitle: article.data.title,
+      isInaugural: !hasPicks, // first issue — picks start next week
+    });
+  }
 }
 ---
 
@@ -55,123 +97,86 @@ function formatDate(dateStr: string | undefined): string {
       <p class="page-kicker">Track record</p>
       <h1 class="page-title">The Picks Board</h1>
       <p class="page-lead">
-        Every pick, every week — published before the tournament, scored after it ends.
-        No retroactive editing. No deleting the misses.
+        Every pick, every week. Cross-referenced against actual results.
+        No deleting the misses.
       </p>
 
-      {total > 0 && (
-        <div class="record-bar">
+      {totalResolved > 0 && (
+        <div class="record-row">
           <div class="record-item">
-            <span class="record-number record-number--win">{wins}</span>
+            <span class="record-number record--win">{wins}</span>
             <span class="record-label">Wins</span>
           </div>
-          <div class="record-divider" />
           <div class="record-item">
             <span class="record-number">{top5s}</span>
             <span class="record-label">Top 5s</span>
           </div>
-          <div class="record-divider" />
           <div class="record-item">
             <span class="record-number">{top10s}</span>
             <span class="record-label">Top 10s</span>
           </div>
-          <div class="record-divider" />
           <div class="record-item">
-            <span class="record-number record-number--miss">{misses}</span>
+            <span class="record-number record--miss">{misses}</span>
             <span class="record-label">Misses</span>
           </div>
         </div>
       )}
     </header>
 
-    <div class="weeks-list container">
-      {weeksWithPicks.length === 0 ? (
-        <div class="empty-state">
+    <div class="weeks container">
+
+      {rows.length === 0 && (
+        <div class="empty">
           <p class="empty-title">First picks dropping soon.</p>
-          <p class="empty-body">Picks publish Sunday evening after each tournament week wraps.</p>
+          <p class="empty-body">Picks publish Sunday evening after each tournament wraps.</p>
         </div>
-      ) : (
-        weeksWithPicks.map(article => {
-          const allResolved = article.data.picks!.every(p => p.result !== 'pending');
-          const anyPending = article.data.picks!.some(p => p.result === 'pending');
-          const weekWins = article.data.picks!.filter(p => p.result === 'win').length;
-          const weekTop5 = article.data.picks!.filter(p => ['win','top5'].includes(p.result)).length;
-          const weekMiss = article.data.picks!.filter(p => p.result === 'miss').length;
-
-          return (
-            <article class="week-card">
-              <div class="week-meta">
-                <div class="week-meta-left">
-                  <span class={`week-status week-status--${allResolved ? 'complete' : 'pending'}`}>
-                    {allResolved ? 'Complete' : 'Pending'}
-                  </span>
-                  <h2 class="week-tournament">{article.data.nextTournament}</h2>
-                  <div class="week-details">
-                    {article.data.nextTournamentDate && (
-                      <span class="week-detail">{formatDate(article.data.nextTournamentDate)}</span>
-                    )}
-                    {article.data.nextTournamentCourse && (
-                      <>
-                        <span class="week-detail-sep">·</span>
-                        <span class="week-detail">{article.data.nextTournamentCourse}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div class="week-meta-right">
-                  {allResolved && (
-                    <div class="week-record">
-                      {weekWins > 0 && <span class="week-record-item week-record-item--win">{weekWins}W</span>}
-                      {weekTop5 > 0 && <span class="week-record-item week-record-item--top5">{weekTop5} top-5</span>}
-                      {weekMiss > 0 && <span class="week-record-item week-record-item--miss">{weekMiss} miss</span>}
-                    </div>
-                  )}
-                  <a href={`${base}/articles/${article.id}`} class="week-source-link">
-                    Read article →
-                  </a>
-                </div>
-              </div>
-
-              <div class="picks-grid">
-                {article.data.picks!.map((pick, i) => (
-                  <div class={`pick-card pick-card--${pick.result}`}>
-                    <span class="pick-number">{i + 1}</span>
-                    <div class="pick-body">
-                      <span class="pick-player">{pick.player}</span>
-                      {pick.note && <span class="pick-note">{pick.note}</span>}
-                    </div>
-                    <span class={`pick-badge pick-badge--${pick.result}`}>
-                      {resultLabel(pick.result)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div class="week-footer">
-                <span class="week-footer-label">Published in</span>
-                <a href={`${base}/articles/${article.id}`} class="week-footer-link">
-                  {article.data.title}
-                </a>
-              </div>
-            </article>
-          );
-        })
       )}
-    </div>
 
+      {rows.map(row => (
+        <div class="week">
+          <div class="week-header">
+            <div class="week-header-left">
+              <h2 class="week-name">{row.label}</h2>
+              <div class="week-meta">
+                {row.date && <span>{row.date}</span>}
+                {row.course && <><span class="sep">·</span><span>{row.course}</span></>}
+              </div>
+            </div>
+            <a href={`${base}/articles/${row.articleId}`} class="week-article-link">
+              {row.isInaugural ? 'Read article →' : 'View article →'}
+            </a>
+          </div>
+
+          {row.isInaugural ? (
+            <p class="inaugural-note">Inaugural issue — picks begin the following week.</p>
+          ) : row.picks && row.picks.length > 0 ? (
+            <div class="picks-row">
+              {row.picks.map((pick, i) => (
+                <div class={`pick pick--${pick.result}`}>
+                  <span class="pick-name">{pick.player}</span>
+                  {pick.note
+                    ? <span class="pick-note">{pick.note}</span>
+                    : <span class={`pick-badge pick-badge--${pick.result}`}>{resultLabel(pick.result)}</span>
+                  }
+                </div>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      ))}
+
+    </div>
   </div>
 </BaseLayout>
 
 <style>
-.picks-page {
-  padding-bottom: var(--spacing-xl);
-}
+.picks-page { padding-bottom: var(--spacing-xl); }
 
 /* ── Header ── */
 .page-header {
   padding: 4rem 0 3rem;
   border-bottom: 1px solid var(--color-border);
-  margin-bottom: 3rem;
+  margin-bottom: 0;
 }
 
 .page-kicker {
@@ -193,50 +198,35 @@ function formatDate(dateStr: string | undefined): string {
 }
 
 .page-lead {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   color: var(--color-text-muted);
-  max-width: 55ch;
+  max-width: 52ch;
   line-height: 1.7;
   margin-bottom: 2.5rem;
 }
 
-/* ── Record bar ── */
-.record-bar {
+/* ── Record ── */
+.record-row {
   display: flex;
-  align-items: center;
-  gap: 0;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  padding: 1.25rem 2rem;
-  width: fit-content;
-  gap: 2rem;
-}
-
-.record-divider {
-  width: 1px;
-  height: 2rem;
-  background: var(--color-border);
+  gap: 3rem;
 }
 
 .record-item {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  min-width: 56px;
+  gap: 0.2rem;
 }
 
 .record-number {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: 2.25rem;
   font-weight: 700;
   line-height: 1;
   color: var(--color-text);
 }
 
-.record-number--win  { color: var(--color-accent); }
-.record-number--miss { color: #c0392b; }
+.record--win  { color: var(--color-accent); }
+.record--miss { color: #c0392b; }
 
 .record-label {
   font-size: 0.6875rem;
@@ -246,157 +236,93 @@ function formatDate(dateStr: string | undefined): string {
   color: var(--color-text-muted);
 }
 
-/* ── Week list ── */
-.weeks-list {
+/* ── Weeks ── */
+.weeks {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
 }
 
-/* ── Week card ── */
-.week-card {
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.week-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 1.5rem 1.75rem 1.25rem;
-  background: var(--color-surface);
+.week {
+  padding: 2.5rem 0;
   border-bottom: 1px solid var(--color-border);
-  gap: 1rem;
 }
 
-.week-meta-left {
+.week-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.week-header-left {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
-.week-status {
-  display: inline-block;
-  font-size: 0.625rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 0.2rem 0.55rem;
-  border-radius: 3px;
-  width: fit-content;
-}
-
-.week-status--complete {
-  background: #e8f5e9;
-  color: #2e7d32;
-}
-
-.week-status--pending {
-  background: #fff8e1;
-  color: #f57f17;
-}
-
-.week-tournament {
+.week-name {
   font-family: var(--font-serif);
   font-size: 1.375rem;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text);
   letter-spacing: -0.02em;
   margin: 0;
 }
 
-.week-details {
+.week-meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.week-detail {
+  gap: 0.4rem;
   font-size: 0.8125rem;
   color: var(--color-text-muted);
 }
 
-.week-detail-sep {
-  color: var(--color-border);
-  font-size: 0.8125rem;
-}
+.sep { opacity: 0.4; }
 
-.week-meta-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.6rem;
-  flex-shrink: 0;
-}
-
-.week-record {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.week-record-item {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
-  border-radius: 3px;
-}
-
-.week-record-item--win  { background: var(--color-accent-light, #fef9f0); color: var(--color-accent); }
-.week-record-item--top5 { background: #e8f5e9; color: #2e7d32; }
-.week-record-item--miss { background: #fdecea; color: #c0392b; }
-
-.week-source-link {
+.week-article-link {
   font-size: 0.8125rem;
   color: var(--color-text-muted);
   text-decoration: none;
+  white-space: nowrap;
   transition: color 0.2s;
+  padding-top: 0.25rem;
 }
 
-.week-source-link:hover { color: var(--color-accent); }
+.week-article-link:hover { color: var(--color-accent); }
 
-/* ── Picks grid ── */
-.picks-grid {
-  padding: 1.25rem 1.75rem;
+/* ── Inaugural note ── */
+.inaugural-note {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ── Pick chips ── */
+.picks-row {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 0.625rem;
 }
 
-.pick-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.875rem 1rem;
-  border-radius: 5px;
-  border: 1px solid var(--color-border);
-  background: var(--color-bg, #fff);
-  transition: border-color 0.15s;
-}
-
-.pick-card--win     { border-color: var(--color-accent); background: var(--color-accent-light, #fef9f0); }
-.pick-card--top5    { border-color: #7bc47b; background: #f4fbf4; }
-.pick-card--top10   { border-color: #aed8b0; background: #f9fdf9; }
-.pick-card--miss    { opacity: 0.55; }
-.pick-card--pending { border-style: dashed; }
-
-.pick-number {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  opacity: 0.5;
-  min-width: 1rem;
-  text-align: center;
-}
-
-.pick-body {
+.pick {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
-  flex: 1;
+  gap: 0.3rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  min-width: 130px;
 }
 
-.pick-player {
+.pick--win     { border-color: var(--color-accent); background: var(--color-accent-light, #fef9f0); }
+.pick--top5    { border-color: #7bc47b; background: #f4fbf4; }
+.pick--top10   { border-color: #aed8b0; }
+.pick--miss    { opacity: 0.5; }
+.pick--pending { border-style: dashed; }
+
+.pick-name {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--color-text);
@@ -405,79 +331,35 @@ function formatDate(dateStr: string | undefined): string {
 .pick-note {
   font-size: 0.75rem;
   color: var(--color-text-muted);
+  font-style: normal;
 }
 
 .pick-badge {
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.09em;
-  padding: 0.25rem 0.625rem;
-  border-radius: 3px;
-  white-space: nowrap;
-}
-
-.pick-badge--win     { background: var(--color-accent); color: #fff; }
-.pick-badge--top5    { background: #2e7d32; color: #fff; }
-.pick-badge--top10   { background: #558b2f; color: #fff; }
-.pick-badge--top20   { background: #9e9d24; color: #fff; }
-.pick-badge--miss    { background: #c0392b; color: #fff; }
-.pick-badge--pending { background: var(--color-surface); color: var(--color-text-muted); border: 1px solid var(--color-border); }
-
-/* ── Week footer ── */
-.week-footer {
-  padding: 0.875rem 1.75rem;
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.week-footer-label {
-  font-size: 0.75rem;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
   letter-spacing: 0.08em;
-  font-weight: 600;
+  color: var(--color-text-muted);
 }
 
-.week-footer-link {
-  font-size: 0.8125rem;
-  color: var(--color-text);
-  text-decoration: underline;
-  text-decoration-color: var(--color-border);
-  transition: color 0.2s, text-decoration-color 0.2s;
-}
+.pick-badge--win    { color: var(--color-accent); }
+.pick-badge--top5   { color: #2e7d32; }
+.pick-badge--top10  { color: #558b2f; }
+.pick-badge--miss   { color: #c0392b; }
 
-.week-footer-link:hover {
-  color: var(--color-accent);
-  text-decoration-color: var(--color-accent);
-}
-
-/* ── Empty state ── */
-.empty-state {
-  padding: 4rem 0;
-}
-
+/* ── Empty ── */
+.empty { padding: 4rem 0; }
 .empty-title {
   font-family: var(--font-serif);
   font-size: 1.5rem;
   font-weight: 600;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
   color: var(--color-text);
 }
+.empty-body { font-size: 1rem; color: var(--color-text-muted); }
 
-.empty-body {
-  font-size: 1rem;
-  color: var(--color-text-muted);
-  max-width: 50ch;
-}
-
-/* ── Responsive ── */
 @media (max-width: 600px) {
-  .week-meta { flex-direction: column; }
-  .week-meta-right { align-items: flex-start; }
-  .record-bar { flex-wrap: wrap; gap: 1rem; }
-  .record-divider { display: none; }
+  .record-row { gap: 1.5rem; flex-wrap: wrap; }
+  .week-header { flex-direction: column; }
+  .week-article-link { padding-top: 0; }
 }
 </style>
