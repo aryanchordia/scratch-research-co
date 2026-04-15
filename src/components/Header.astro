@@ -83,7 +83,36 @@ const base = import.meta.env.BASE_URL;
 }
 
 @media (max-width: 600px) {
-  .header-nav { display: none; }
+  .site-header { border-bottom: none; }
+
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 1rem 0 0;
+  }
+
   .wordmark { font-size: 0.75rem; }
+
+  .header-nav {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    border-top: 1px solid var(--color-border);
+    margin-top: 0.875rem;
+  }
+
+  .header-nav a {
+    flex: 1;
+    text-align: center;
+    padding: 0.625rem 0;
+    font-size: 0.6875rem;
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+  }
+
+  .header-nav a:last-child {
+    border-right: none;
+  }
 }
 </style>
