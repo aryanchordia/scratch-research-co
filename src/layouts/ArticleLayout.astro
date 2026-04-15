@@ -1,0 +1,177 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tournament: string;
+  tour: string;
+  winner?: string;
+  course?: string;
+  isMajor?: boolean;
+}
+
+const { title, description, date, tournament, tour, winner, course, isMajor } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  weekday: 'long',
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="article-page">
+
+    <header class="article-header container">
+      <div class="article-eyebrow">
+        <span class:list={['tag', isMajor && 'tag--major']}>
+          {isMajor ? 'Major Championship' : tour}
+        </span>
+        <time datetime={date.toISOString()} class="article-date">{formattedDate}</time>
+      </div>
+
+      <h1 class="article-title">{title}</h1>
+
+      {description && (
+        <p class="article-lead">{description}</p>
+      )}
+
+      <div class="article-meta-row">
+        {tournament && (
+          <div class="meta-item">
+            <span class="meta-label">Tournament</span>
+            <span class="meta-value">{tournament}</span>
+          </div>
+        )}
+        {course && (
+          <div class="meta-item">
+            <span class="meta-label">Venue</span>
+            <span class="meta-value">{course}</span>
+          </div>
+        )}
+        {winner && (
+          <div class="meta-item">
+            <span class="meta-label">Champion</span>
+            <span class="meta-value winner">{winner}</span>
+          </div>
+        )}
+      </div>
+    </header>
+
+    <div class="article-divider"></div>
+
+    <div class="article-body container">
+      <div class="content-width prose">
+        <slot />
+      </div>
+    </div>
+
+    <div class="article-back container">
+      <a href={import.meta.env.BASE_URL} class="back-link">← Back to Journal</a>
+    </div>
+
+  </article>
+</BaseLayout>
+
+<style>
+.article-page {
+  padding-top: 3.5rem;
+}
+
+.article-header {
+  max-width: 860px;
+  margin: 0 auto 2.5rem;
+}
+
+.article-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.article-date {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.article-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1.25rem;
+}
+
+.article-lead {
+  font-size: 1.1875rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  max-width: 65ch;
+  margin-bottom: 2rem;
+}
+
+.article-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.meta-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.meta-value {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.meta-value.winner {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.article-divider {
+  height: 1px;
+  background: var(--color-border);
+  max-width: var(--max-width);
+  margin: 0 auto 3.5rem;
+}
+
+.article-body {
+  padding-bottom: var(--spacing-lg);
+}
+
+.article-back {
+  padding-bottom: var(--spacing-lg);
+}
+
+.back-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.back-link:hover { color: var(--color-text); }
+</style>

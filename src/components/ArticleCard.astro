@@ -1,0 +1,132 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  date: Date;
+  tournament: string;
+  tour: string;
+  winner?: string;
+  slug: string;
+  isMajor?: boolean;
+}
+
+const { title, description, date, tournament, tour, winner, slug, isMajor } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+---
+
+<article class="article-card">
+  <a href={`${base}/articles/${slug}`} class="card-link">
+    <div class="card-meta">
+      <span class:list={['tag', isMajor && 'tag--major']}>
+        {isMajor ? 'Major' : tour}
+      </span>
+      <time datetime={date.toISOString()} class="card-date">{formattedDate}</time>
+    </div>
+
+    <h2 class="card-title">{title}</h2>
+
+    <p class="card-description">{description}</p>
+
+    <div class="card-footer">
+      {winner && (
+        <div class="card-winner">
+          <span class="winner-label">Winner</span>
+          <span class="winner-name">{winner}</span>
+        </div>
+      )}
+      <span class="card-read">Read →</span>
+    </div>
+  </a>
+</article>
+
+<style>
+.article-card {
+  border-bottom: 1px solid var(--color-border);
+  padding: 2.25rem 0;
+  transition: opacity 0.2s;
+}
+
+.article-card:first-child {
+  border-top: 1px solid var(--color-border);
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.875rem;
+}
+
+.card-date {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.375rem, 3vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+  transition: color 0.2s;
+}
+
+.card-link:hover .card-title {
+  color: var(--color-accent);
+}
+
+.card-description {
+  font-size: 0.9375rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin: 0 0 1.25rem;
+  max-width: 70ch;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-winner {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.winner-label {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.winner-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.card-read {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-accent);
+}
+</style>

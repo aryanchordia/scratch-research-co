@@ -1,0 +1,247 @@
+/* Scratch Research Co. — Global Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap');
+
+:root {
+  --color-bg: #f9f7f4;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b6b6b;
+  --color-border: #e5e1db;
+  --color-accent: #2c6e49;
+  --color-accent-light: #e8f0eb;
+  --color-gold: #b5924c;
+
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --max-width: 1120px;
+  --content-width: 760px;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --spacing-xl: 7rem;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Typography ─────────────────────────────────────── */
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700; }
+h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); font-weight: 600; }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.5rem); font-weight: 600; }
+
+p {
+  margin-bottom: 1.4em;
+  font-size: 1.0625rem;
+  color: #2a2a2a;
+}
+
+/* ─── Layout Utilities ───────────────────────────────── */
+
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.content-width {
+  max-width: var(--content-width);
+  margin: 0 auto;
+}
+
+/* ─── Article Prose ──────────────────────────────────── */
+
+.prose h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 2.5rem 0 1rem;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.prose h3 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  margin: 2rem 0 0.75rem;
+}
+
+.prose p {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  margin-bottom: 1.5em;
+  color: #2a2a2a;
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5em;
+}
+
+.prose li {
+  margin-bottom: 0.5em;
+  line-height: 1.7;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.prose em {
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding: 1rem 1.5rem;
+  margin: 2rem 0;
+  background: var(--color-accent-light);
+  border-radius: 0 4px 4px 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.125rem;
+}
+
+.prose blockquote p {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2.5rem 0;
+}
+
+/* ─── Picks Box ──────────────────────────────────────── */
+
+.picks-box {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-accent);
+  border-radius: 4px;
+  padding: 1.75rem;
+  margin: 2.5rem 0;
+}
+
+.picks-box h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.picks-result-good { color: var(--color-accent); }
+.picks-result-bad { color: #c0392b; }
+.picks-result-push { color: var(--color-gold); }
+
+/* ─── Stat Grid ──────────────────────────────────────── */
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.stat-item {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* ─── Tag ────────────────────────────────────────────── */
+
+.tag {
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2em 0.6em;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  color: var(--color-accent);
+}
+
+.tag--major {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+/* ─── Scrollbar ──────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }

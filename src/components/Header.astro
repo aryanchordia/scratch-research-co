@@ -1,0 +1,89 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<header class="site-header">
+  <div class="container">
+    <div class="header-inner">
+
+      <a href={base} class="wordmark">
+        <span class="wordmark-scratch">SCRATCH</span>
+        <span class="wordmark-divider">·</span>
+        <span class="wordmark-research">RESEARCH</span>
+        <span class="wordmark-co">CO.</span>
+      </a>
+
+      <nav class="header-nav">
+        <a href={base}>Journal</a>
+        <a href={`${base}/picks`}>Picks</a>
+        <a href={`${base}/about`}>About</a>
+      </nav>
+
+    </div>
+  </div>
+</header>
+
+<style>
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(249, 247, 244, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-decoration: none;
+  color: var(--color-text);
+  transition: opacity 0.2s;
+}
+
+.wordmark:hover { opacity: 0.7; }
+
+.wordmark-scratch { color: var(--color-text); }
+.wordmark-divider { color: var(--color-accent); font-weight: 300; }
+.wordmark-research { color: var(--color-text); }
+.wordmark-co {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.header-nav {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.header-nav a {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.header-nav a:hover {
+  color: var(--color-text);
+}
+
+@media (max-width: 600px) {
+  .header-nav { display: none; }
+  .wordmark { font-size: 0.75rem; }
+}
+</style>

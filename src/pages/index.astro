@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+const sorted = allArticles.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+
+<BaseLayout>
+  <div class="home-page">
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+          <p class="hero-kicker">Weekly golf intelligence</p>
+          <h1 class="hero-headline">
+            Every Sunday.<br />
+            <em>Every course.</em><br />
+            Every story.
+          </h1>
+          <p class="hero-body">
+            Tournament recaps, course history, insider observations, and picks for the week ahead —
+            written with the same curiosity you'd bring walking the fairways yourself.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Articles -->
+    <section class="journal-section">
+      <div class="container">
+
+        <div class="section-header">
+          <h2 class="section-title">The Journal</h2>
+          <span class="section-count">{sorted.length} issue{sorted.length !== 1 ? 's' : ''}</span>
+        </div>
+
+        {sorted.length === 0 ? (
+          <div class="empty-state">
+            <p class="empty-title">First issue dropping soon.</p>
+            <p class="empty-body">
+              The pipeline is live. Next Sunday's tournament will trigger the first edition automatically.
+            </p>
+          </div>
+        ) : (
+          <div class="article-list">
+            {sorted.map(article => (
+              <ArticleCard
+                title={article.data.title}
+                description={article.data.description}
+                date={article.data.date}
+                tournament={article.data.tournament}
+                tour={article.data.tour}
+                winner={article.data.winner}
+                slug={article.id}
+                isMajor={article.data.isMajor}
+              />
+            ))}
+          </div>
+        )}
+
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+.hero {
+  padding: 5rem 0 4rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-inner {
+  max-width: 680px;
+}
+
+.hero-kicker {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  margin-bottom: 1.25rem;
+}
+
+.hero-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  margin-bottom: 1.75rem;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--color-accent);
+}
+
+.hero-body {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  max-width: 55ch;
+  margin: 0;
+}
+
+.journal-section {
+  padding: 3.5rem 0;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-text-muted);
+}
+
+.section-count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+.empty-state {
+  padding: 4rem 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.empty-title {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.empty-body {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  max-width: 50ch;
+  margin: 0;
+}
+</style>

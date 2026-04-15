@@ -1,0 +1,227 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+const withPicks = allArticles
+  .filter(a => a.data.picks && a.data.picks.length > 0)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const base = import.meta.env.BASE_URL;
+
+// Calculate overall record
+let wins = 0, top5s = 0, misses = 0, total = 0;
+withPicks.forEach(article => {
+  article.data.picks?.forEach(pick => {
+    if (pick.result === 'pending') return;
+    total++;
+    if (pick.result === 'win') wins++;
+    if (['win', 'top5'].includes(pick.result)) top5s++;
+    if (pick.result === 'miss') misses++;
+  });
+});
+---
+
+<BaseLayout title="Picks Record" description="Our week-by-week picks history across all tours.">
+  <div class="picks-page">
+
+    <header class="page-header container">
+      <p class="page-kicker">Track record</p>
+      <h1 class="page-title">The Picks Board</h1>
+      <p class="page-lead">
+        Every pick, every week. Cross-referenced against actual results.
+        No deleting the misses.
+      </p>
+
+      {total > 0 && (
+        <div class="record-summary">
+          <div class="record-item">
+            <span class="record-number">{wins}</span>
+            <span class="record-label">Wins</span>
+          </div>
+          <div class="record-item">
+            <span class="record-number">{top5s}</span>
+            <span class="record-label">Top 5s</span>
+          </div>
+          <div class="record-item">
+            <span class="record-number">{misses}</span>
+            <span class="record-label">Misses</span>
+          </div>
+          <div class="record-item">
+            <span class="record-number">{total}</span>
+            <span class="record-label">Total Picks</span>
+          </div>
+        </div>
+      )}
+    </header>
+
+    <div class="picks-list container">
+      {withPicks.length === 0 ? (
+        <div class="empty-state">
+          <p>Picks start appearing here after the first issue publishes.</p>
+        </div>
+      ) : (
+        withPicks.map(article => (
+          <div class="week-picks">
+            <div class="week-header">
+              <a href={`${base}/articles/${article.id}`} class="week-title">
+                {article.data.tournament}
+              </a>
+              <time class="week-date">
+                {article.data.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              </time>
+            </div>
+            <div class="picks-grid">
+              {article.data.picks?.map(pick => (
+                <div class:list={['pick-item', `pick-item--${pick.result}`]}>
+                  <span class="pick-player">{pick.player}</span>
+                  <span class="pick-result">{pick.result.toUpperCase().replace('TOP5', 'T5').replace('TOP10', 'T10').replace('TOP20', 'T20')}</span>
+                  {pick.note && <span class="pick-note">{pick.note}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+.picks-page { padding-bottom: var(--spacing-xl); }
+
+.page-header {
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 3rem;
+}
+
+.page-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 1rem;
+}
+
+.page-lead {
+  font-size: 1.0625rem;
+  color: var(--color-text-muted);
+  max-width: 55ch;
+  margin-bottom: 2.5rem;
+}
+
+.record-summary {
+  display: flex;
+  gap: 3rem;
+}
+
+.record-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.record-number {
+  font-family: var(--font-serif);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.record-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.week-picks {
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.week-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.week-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text);
+  transition: color 0.2s;
+}
+
+.week-title:hover { color: var(--color-accent); }
+
+.week-date {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.picks-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pick-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.875rem 1.125rem;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-surface);
+  min-width: 140px;
+}
+
+.pick-item--win { border-color: var(--color-accent); background: var(--color-accent-light); }
+.pick-item--top5 { border-color: #7bc47b; }
+.pick-item--top10 { border-color: #aed8b0; }
+.pick-item--miss { opacity: 0.6; }
+.pick-item--pending { border-style: dashed; }
+
+.pick-player {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.pick-result {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+}
+
+.pick-item--win .pick-result { color: var(--color-accent); }
+.pick-item--miss .pick-result { color: #c0392b; }
+
+.pick-note {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.empty-state {
+  padding: 3rem 0;
+  color: var(--color-text-muted);
+}
+</style>

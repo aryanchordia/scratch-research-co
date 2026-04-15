@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About" description="What Scratch Research Co. is and why it exists.">
+  <div class="about-page">
+
+    <div class="container content-width">
+      <header class="about-header">
+        <p class="page-kicker">About</p>
+        <h1 class="page-title">What This Is</h1>
+      </header>
+
+      <div class="about-body prose">
+        <p>
+          Scratch Research Co. started with a notebook and a Sunday afternoon at Augusta National.
+          No phone. No leaderboard. Just the sound of the gallery, the smell of pine, and
+          a growing list of things nobody mentions on TV.
+        </p>
+
+        <p>
+          The goal is simple: write about golf the way you'd talk about it with someone
+          who actually played and watched and wondered. Not press releases. Not scorecards.
+          <em>Observations.</em>
+        </p>
+
+        <h2>How It Works</h2>
+
+        <p>
+          Every Sunday evening, once tournaments wrap globally, an automated pipeline fetches
+          results, statistics, and historical context — then hands it to Claude (Anthropic's AI)
+          to draft the week's issue. That draft comes to me for a read-through before it publishes.
+        </p>
+
+        <p>
+          Think of it as AI-assisted, human-curated. The research is thorough. The voice stays
+          consistent. And nothing publishes without a human eye on it first.
+        </p>
+
+        <h2>The Picks</h2>
+
+        <p>
+          Every issue closes with picks for the following week — players we like based on
+          form, course history, and stats. We cross-reference those picks the following week.
+          The misses stay on the board. That's the deal.
+        </p>
+
+        <h2>Coverage</h2>
+
+        <p>
+          PGA Tour. DP World Tour. LIV Golf. The Majors. If there's a professional stroke-play
+          event of consequence ending on a Sunday, it's in scope.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<style>
+.about-page { padding: 4rem 0 var(--spacing-xl); }
+
+.about-header {
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.page-kicker {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.about-body { padding-top: 0.5rem; }
+</style>

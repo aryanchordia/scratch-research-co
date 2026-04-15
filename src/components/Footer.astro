@@ -1,0 +1,96 @@
+---
+const year = new Date().getFullYear();
+const base = import.meta.env.BASE_URL;
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="wordmark">SCRATCH · RESEARCH CO.</span>
+        <p class="footer-tagline">Weekly golf intelligence. Every Sunday.</p>
+      </div>
+      <div class="footer-links">
+        <a href={base}>Journal</a>
+        <a href={`${base}/picks`}>Picks</a>
+        <a href={`${base}/about`}>About</a>
+        <a href="https://github.com/aryanchordia/scratch-research-co" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} Scratch Research Co. All rights reserved.</span>
+      <span class="footer-note">AI-assisted. Human-curated.</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+.site-footer {
+  margin-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+  padding: var(--spacing-lg) 0 var(--spacing-md);
+  background: var(--color-surface);
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.wordmark {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--color-text);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.footer-tagline {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.footer-links a {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--color-text); }
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.footer-note {
+  font-style: italic;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .footer-inner { flex-direction: column; }
+  .footer-links { flex-wrap: wrap; gap: 1rem; }
+  .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
