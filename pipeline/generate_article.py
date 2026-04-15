@@ -161,6 +161,14 @@ Start directly with the intro paragraph.
 """
 
 
+def load_scored_picks() -> dict:
+    """Load picks that were scored this run by score_picks.py."""
+    scored_file = DATA_DIR / "scored_picks.json"
+    if scored_file.exists():
+        return json.loads(scored_file.read_text())
+    return {"scored_weeks": []}
+
+
 def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
     """Construct the user message with all tournament context."""
 
@@ -168,9 +176,36 @@ def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
     upcoming = tournament_data.get("upcoming_events", [])
     course_history = tournament_data.get("course_history", {})
 
-    last_picks = get_last_week_picks(picks_history)
+    # Load picks scored this run (score_picks.py ran before us)
+    scored = load_scored_picks()
+    scored_weeks = scored.get("scored_weeks", [])
 
     sections = []
+
+    # Scored picks from last week — feed into "## Last Week's Picks" section
+    if scored_weeks:
+        sections.append("## LAST WEEK'S PICKS — SCORED RESULTS\n")
+        sections.append("Include a '## Last Week's Picks' section summarising how these did.\n")
+        for week in scored_weeks:
+            sections.append(f"Tournament: {week['tournament']}")
+            for pick in week["picks"]:
+                note = f" ({pick['note']})" if pick.get("note") else ""
+                sections.append(f"  - {pick['player']}: {pick['result']}{note}")
+            lb5 = week.get("leaderboard_top5", [])
+            if lb5:
+                sections.append(f"  Top 5 finishers: " + ", ".join(
+                    f"{p['position_display']} {p['name']} ({p['score']})" for p in lb5
+                ))
+        sections.append("")
+    else:
+        # Fallback to old picks history if scored_picks is empty
+        last_picks = get_last_week_picks(picks_history)
+        if last_picks:
+            sections.append("## LAST WEEK'S PICKS (results not yet available)\n")
+            sections.append(f"Tournament: {last_picks.get('tournament')}")
+            for pick in last_picks.get("picks", []):
+                sections.append(f"- {pick['player']} — result: {pick.get('result', 'pending')}")
+            sections.append("")
 
     # Completed events
     if completed:
@@ -193,7 +228,6 @@ def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
         sections.append("## COURSE & TOURNAMENT HISTORY\n")
         for name, text in list(course_history.items())[:4]:
             sections.append(f"**{name}:**")
-            # Truncate to first 400 chars of each history blurb
             sections.append(text[:400] + ("..." if len(text) > 400 else ""))
             sections.append("")
 
@@ -202,14 +236,6 @@ def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
         sections.append("## UPCOMING TOURNAMENTS\n")
         for e in upcoming[:2]:
             sections.append(f"- {e.get('name')} ({e.get('date')}) at {e.get('venue', 'TBD')}, {e.get('city', '')}")
-        sections.append("")
-
-    # Last week's picks
-    if last_picks:
-        sections.append("## LAST WEEK'S PICKS (to cross-reference)\n")
-        sections.append(f"Tournament: {last_picks.get('tournament')}")
-        for pick in last_picks.get("picks", []):
-            sections.append(f"- {pick['player']} — result: {pick.get('result', 'pending')}")
         sections.append("")
 
     return "\n".join(sections)

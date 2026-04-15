@@ -34,28 +34,31 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Step 1 — Fetch tournament data
+      - name: Step 1 — Score last week's picks
+        run: python pipeline/score_picks.py
+
+      - name: Step 2 — Fetch tournament data
         run: python pipeline/fetch_data.py --tours ${{ github.event.inputs.tours || 'all' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
-      - name: Step 2 — Fetch DataGolf course fit + rankings
+      - name: Step 3 — Fetch DataGolf course fit + rankings
         run: python pipeline/fetch_datagolf.py --course "${{ env.NEXT_COURSE }}"
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           NEXT_COURSE: "Harbour Town Golf Links"
 
-      - name: Step 3 — Verify facts (guardrail against hallucination)
+      - name: Step 4 — Verify facts (guardrail against hallucination)
         run: python pipeline/verify_facts.py
 
-      - name: Step 4 — Generate article with Claude
+      - name: Step 5 — Generate article with Claude
         run: python pipeline/generate_article.py
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
-      - name: Step 5 — Create review PR
+      - name: Step 6 — Create review PR
         run: python pipeline/create_pr.py
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
