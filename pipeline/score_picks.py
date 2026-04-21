@@ -288,7 +288,7 @@ def find_articles_needing_scoring() -> list[dict]:
             continue
 
         tourney_end = tourney_start + datetime.timedelta(days=3)  # Thursday + 3 = Sunday
-        if today <= tourney_end:
+        if today < tourney_end:
             print(f"  [skip] {mdx_file.name}: tournament ends {tourney_end}, today is {today}")
             continue
 

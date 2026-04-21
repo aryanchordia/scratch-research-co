@@ -162,11 +162,24 @@ Start directly with the intro paragraph.
 
 
 def load_scored_picks() -> dict:
-    """Load picks that were scored this run by score_picks.py."""
     scored_file = DATA_DIR / "scored_picks.json"
     if scored_file.exists():
         return json.loads(scored_file.read_text())
     return {"scored_weeks": []}
+
+
+def load_datagolf_data() -> dict:
+    dg_file = DATA_DIR / "datagolf_data.json"
+    if dg_file.exists():
+        return json.loads(dg_file.read_text())
+    return {}
+
+
+def load_verified_facts() -> dict:
+    facts_file = DATA_DIR / "verified_facts.json"
+    if facts_file.exists():
+        return json.loads(facts_file.read_text())
+    return {}
 
 
 def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
@@ -175,6 +188,9 @@ def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
     completed = tournament_data.get("completed_events", [])
     upcoming = tournament_data.get("upcoming_events", [])
     course_history = tournament_data.get("course_history", {})
+
+    datagolf = load_datagolf_data()
+    verified_facts = load_verified_facts()
 
     # Load picks scored this run (score_picks.py ran before us)
     scored = load_scored_picks()
@@ -236,6 +252,50 @@ def build_user_prompt(tournament_data: dict, picks_history: list[dict]) -> str:
         sections.append("## UPCOMING TOURNAMENTS\n")
         for e in upcoming[:2]:
             sections.append(f"- {e.get('name')} ({e.get('date')}) at {e.get('venue', 'TBD')}, {e.get('city', '')}")
+        sections.append("")
+
+    # DataGolf course fit + rankings — the backbone of our picks
+    if datagolf.get("top10_fit") or datagolf.get("combined_picks_candidates"):
+        sections.append("## DATAGOLF COURSE FIT & PICKS DATA\n")
+        sections.append(f"Course: {datagolf.get('course', 'TBD')}\n")
+
+        candidates = datagolf.get("combined_picks_candidates", [])
+        if candidates:
+            sections.append("Top combined candidates (course fit + world rank):")
+            for c in candidates[:15]:
+                sections.append(
+                    f"  {c['name']:25} "
+                    f"CourseFit#{c['course_fit_rank']:3}  "
+                    f"DGWorldRank#{c['dg_world_rank']:3}  "
+                    f"EV={c['dg_skill_ev']:.3f}"
+                )
+            sections.append("")
+
+        top10 = datagolf.get("top10_fit", [])
+        if top10:
+            sections.append("Top 10 by course fit alone:")
+            for p in top10:
+                sections.append(f"  #{p['rank']:2} {p['name']:25} adj={p['adj_value']:.4f}")
+            sections.append("")
+
+        sections.append(
+            "USE THIS DATA to justify your 5 picks in '## Our Picks'. "
+            "Reference each player's CourseFit rank and DGWorldRank numbers explicitly.\n"
+        )
+
+    # Verified facts — guardrail against hallucination
+    if verified_facts.get("players"):
+        sections.append("## VERIFIED PLAYER FACTS (from Wikipedia — cite only what appears here)\n")
+        guardrails = verified_facts.get("guardrails", [])
+        for g in guardrails:
+            sections.append(f"RULE: {g}")
+        sections.append("")
+        for name, f in list(verified_facts["players"].items())[:12]:
+            slam = " — HAS CAREER GRAND SLAM" if f.get("has_career_grand_slam") else ""
+            majors = f.get("major_wins_mentioned", "not specified")
+            sections.append(f"  {name}: majors={majors}{slam}")
+            if f.get("wiki_summary"):
+                sections.append(f"    Context: {f['wiki_summary'][:200]}")
         sections.append("")
 
     return "\n".join(sections)
