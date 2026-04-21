@@ -52,12 +52,10 @@ interface Row {
 const rows: Row[] = [];
 const seenTournaments = new Set<string>();
 
-// Process newest-first
+// Pass 1 (newest first): collect all nextTournament picks rows.
+// These are the picks we PUBLISHED — always shown with their results.
 for (const article of sorted) {
-  const hasPicks = article.data.picks && article.data.picks.length > 0;
-
-  // Row A: the nextTournament picks (if any)
-  if (hasPicks && article.data.nextTournament) {
+  if (article.data.picks?.length && article.data.nextTournament) {
     const key = article.data.nextTournament.toLowerCase().trim();
     if (!seenTournaments.has(key)) {
       seenTournaments.add(key);
@@ -72,8 +70,11 @@ for (const article of sorted) {
       });
     }
   }
+}
 
-  // Row B: the covered tournament itself — show if we haven't shown it yet
+// Pass 2: add any covered tournament not already represented above.
+// This handles inaugural issues where no picks were published yet.
+for (const article of sorted) {
   const coveredKey = article.data.tournament.toLowerCase().trim();
   if (!seenTournaments.has(coveredKey)) {
     seenTournaments.add(coveredKey);
@@ -81,10 +82,10 @@ for (const article of sorted) {
       label: article.data.tournament,
       date: formatDate(article.data.date),
       course: article.data.course,
-      picks: hasPicks ? undefined : undefined, // no picks FOR this tournament
+      picks: undefined,
       articleId: article.id,
       articleTitle: article.data.title,
-      isInaugural: !hasPicks, // first issue — picks start next week
+      isInaugural: true,
     });
   }
 }
