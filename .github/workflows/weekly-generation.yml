@@ -44,11 +44,10 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Step 3 — Fetch DataGolf course fit + rankings
-        run: python pipeline/fetch_datagolf.py --course "${{ env.NEXT_COURSE }}"
+        run: python pipeline/fetch_datagolf.py
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          NEXT_COURSE: "Harbour Town Golf Links"
 
       - name: Step 4 — Verify facts (guardrail against hallucination)
         run: python pipeline/verify_facts.py

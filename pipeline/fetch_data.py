@@ -152,33 +152,40 @@ def parse_espn_event(data: dict) -> dict | None:
     }
 
 
-def fetch_espn_schedule(tour_slug: str) -> list[dict]:
-    """Fetch upcoming schedule to find next tournament."""
-    print(f"  Fetching ESPN {tour_slug.upper()} schedule...")
+def fetch_next_tournament(tour_slug: str) -> dict | None:
+    """
+    Find the next upcoming tournament by probing date-specific scoreboards.
+    Tries Wed–Sun of next week. Returns first event found that isn't already
+    complete, or None if nothing found.
+    """
     today = datetime.date.today()
-    year = today.year
-    url = f"{ESPN_BASE}/{tour_slug}/schedule?season={year}"
-    data = fetch_json(url)
-    if not data:
-        return []
-
-    events = data.get("seasons", [{}])[0].get("events", []) if "seasons" in data else data.get("events", [])
-    upcoming = []
-    for e in events:
-        try:
-            event_date = datetime.date.fromisoformat(e.get("date", "")[:10])
-            if event_date >= today:
-                upcoming.append({
-                    "name": e.get("name", ""),
-                    "shortName": e.get("shortName", ""),
-                    "date": e.get("date", "")[:10],
-                    "venue": e.get("venue", {}).get("fullName", ""),
-                    "city": e.get("venue", {}).get("address", {}).get("city", ""),
-                })
-        except (ValueError, AttributeError):
+    # Pipeline runs Sunday night — next event typically starts Thu (+4 days)
+    # Try Wed through the following Mon to be safe
+    for offset in range(3, 9):
+        date = today + datetime.timedelta(days=offset)
+        url = f"{ESPN_BASE}/{tour_slug}/scoreboard?dates={date.strftime('%Y%m%d')}"
+        data = fetch_json(url)
+        if not data:
             continue
-
-    return upcoming[:3]  # next 3 events
+        for event in data.get("events", []):
+            status = event.get("competitions", [{}])[0].get("status", {}).get("type", {}).get("name", "")
+            # Skip already-completed events (the one we just covered)
+            if status in ("STATUS_FINAL", "STATUS_COMPLETE", "Completed"):
+                continue
+            venue = event.get("competitions", [{}])[0].get("venue", {})
+            venue_name = venue.get("fullName", "")
+            city = venue.get("address", {}).get("city", "")
+            event_name = event.get("name", "")
+            event_date = event.get("date", "")[:10]
+            if event_name:
+                return {
+                    "name": event_name,
+                    "shortName": event.get("shortName", ""),
+                    "date": event_date,
+                    "venue": venue_name,  # may be empty; fetch_datagolf resolves from name
+                    "city": city,
+                }
+    return None
 
 
 # ─── Course / History ─────────────────────────────────────────────────────────
@@ -249,19 +256,15 @@ def build_tournament_data(tours: list[str]) -> dict:
         else:
             print(f"  - No active event found")
 
-        # Upcoming schedule
-        upcoming = fetch_espn_schedule(espn_slug)
-        result["upcoming_events"].extend(upcoming)
-
-    # Deduplicate upcoming
-    seen = set()
-    deduped = []
-    for e in result["upcoming_events"]:
-        key_str = e.get("name", "")
-        if key_str not in seen:
-            seen.add(key_str)
-            deduped.append(e)
-    result["upcoming_events"] = deduped[:5]
+        # Next tournament (for DataGolf course fit lookup)
+        if espn_slug == "pga" and not result.get("next_tournament"):
+            next_event = fetch_next_tournament(espn_slug)
+            if next_event:
+                result["next_tournament"] = next_event
+                result["upcoming_events"].append(next_event)
+                print(f"  ✓ Next PGA event: {next_event['name']} at {next_event['venue']} ({next_event['date']})")
+            else:
+                print("  - Next tournament: not found via scoreboard probe")
 
     return result
 
