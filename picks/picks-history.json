@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "tournament": "Cadillac Championship",
+    "date": "2026-04-27",
+    "picks": [
+      {
+        "player": "Russell Henley",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Si Woo Kim",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Collin Morikawa",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Alex Noren",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Nick Taylor",
+        "result": "pending",
+        "note": ""
+      }
+    ]
+  }
+]
