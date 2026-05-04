@@ -1,1 +1,33 @@
-[]
+[
+  {
+    "tournament": "Truist Championship",
+    "date": "2026-05-04",
+    "picks": [
+      {
+        "player": "Cameron Young",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Jake Knapp",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Sam Burns",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Nicolai Hojgaard",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Chris Gotterup",
+        "result": "pending",
+        "note": ""
+      }
+    ]
+  }
+]
