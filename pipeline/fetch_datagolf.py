@@ -26,6 +26,8 @@ import urllib.request
 import urllib.error
 from pathlib import Path
 
+from courses import resolve_course, COURSE_NAME_MAP, TOURNAMENT_TO_COURSE
+
 ROOT = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 DATA_DIR.mkdir(exist_ok=True)
@@ -35,65 +37,7 @@ CLOUDFLARE_ACCOUNT_ID = os.environ.get("CLOUDFLARE_ACCOUNT_ID", "")
 
 DG_BASE = "https://datagolf.com"
 
-# Mapping of common course names → DataGolf's exact option values
-COURSE_NAME_MAP = {
-    "harbour town": "Harbour Town Golf Links",
-    "harbour town golf links": "Harbour Town Golf Links",
-    "augusta national": "Augusta National Golf Club",
-    "augusta": "Augusta National Golf Club",
-    "pebble beach": "Pebble Beach Golf Links",
-    "muirfield village": "Muirfield Village Golf Club",
-    "congressional": "Congressional CC (Blue)",
-    "colonial": "Colonial Country Club",
-    "east lake": "East Lake Golf Club",
-    "tpc sawgrass": "TPC Sawgrass (Stadium)",
-    "tpc scottsdale": "TPC Scottsdale (Stadium)",
-    "tpc louisiana": "TPC Louisiana",
-    "bay hill": "Arnold Palmer's Bay Hill Club & Lodge",
-    "riviera": "Riviera Country Club",
-    "torrey pines": "Torrey Pines (South Course)",
-    "quail hollow": "Quail Hollow Club",
-    "southern hills": "Southern Hills Country Club",
-    "oak hill": "Oak Hill Country Club (East)",
-    "valhalla": "Valhalla Golf Club",
-    "bethpage": "Bethpage Black",
-    "shinnecock": "Shinnecock Hills Golf Club",
-    "winged foot": "Winged Foot Golf Club (West)",
-    "carnoustie": "Carnoustie Golf Links",
-    "st andrews": "St Andrews Links (Old Course)",
-    "royal troon": "Royal Troon Golf Club (Old)",
-    "muirfield": "Muirfield",
-    "royal portrush": "Royal Portrush Golf Club (Dunluce)",
-}
-
-# Tournament name keywords → course name (for when ESPN gives name but not venue)
-TOURNAMENT_TO_COURSE = {
-    "zurich classic": "TPC Louisiana",
-    "wells fargo": "Quail Hollow Club",
-    "pga championship": "Quail Hollow Club",
-    "charles schwab": "Colonial Country Club",
-    "memorial": "Muirfield Village Golf Club",
-    "us open": "Oakmont Country Club",
-    "travelers": "TPC River Highlands",
-    "rocket mortgage": "Detroit Golf Club",
-    "john deere": "TPC Deere Run",
-    "genesis scottish": "The Renaissance Club",
-    "genesis invitational": "Riviera Country Club",
-    "the open": "Royal Troon Golf Club (Old)",
-    "british open": "Royal Troon Golf Club (Old)",
-    "fedex st. jude": "TPC Southwind",
-    "bmw championship": "Castle Pines Golf Club",
-    "tour championship": "East Lake Golf Club",
-    "arnold palmer": "Arnold Palmer's Bay Hill Club & Lodge",
-    "players championship": "TPC Sawgrass (Stadium)",
-    "waste management": "TPC Scottsdale (Stadium)",
-    "farmers insurance": "Torrey Pines (South Course)",
-    "sony open": "Waialae Country Club",
-    "sentry": "Plantation Course at Kapalua",
-    "rbc canadian": "Hamilton Golf & Country Club",
-    "rbc heritage": "Harbour Town Golf Links",
-    "masters": "Augusta National Golf Club",
-}
+# COURSE_NAME_MAP and TOURNAMENT_TO_COURSE are imported from courses.py
 
 
 # ─── Cloudflare helpers ───────────────────────────────────────────────────────
@@ -251,14 +195,7 @@ def parse_course_fit(html: str) -> list[dict]:
 
 def resolve_course_name(course_input: str) -> str:
     """Normalize a course or tournament name to DataGolf's exact option value."""
-    normalized = course_input.lower().strip()
-    if normalized in COURSE_NAME_MAP:
-        return COURSE_NAME_MAP[normalized]
-    # Try tournament name keywords
-    for keyword, course in TOURNAMENT_TO_COURSE.items():
-        if keyword in normalized:
-            return course
-    return course_input
+    return resolve_course(course_input) or course_input
 
 
 # ─── Main fetch ───────────────────────────────────────────────────────────────
@@ -351,6 +288,7 @@ def main():
     course = args.course.strip()
 
     # Auto-detect from tournament_data.json written by fetch_data.py
+    next_tournament_name = ""
     if not course:
         tournament_file = DATA_DIR / "tournament_data.json"
         if tournament_file.exists():
@@ -358,27 +296,34 @@ def main():
                 td = json.loads(tournament_file.read_text())
                 next_t = td.get("next_tournament", {})
                 venue = next_t.get("venue", "")
-                name = next_t.get("name", "")
+                next_tournament_name = next_t.get("name", "")
                 if venue:
                     course = venue
-                    print(f"  Auto-detected next venue from ESPN: {course}")
-                elif name:
-                    # No venue in ESPN data — resolve from tournament name
-                    resolved = resolve_course_name(name)
-                    if resolved != name:
+                    print(f"  Auto-detected next venue: {course}")
+                elif next_tournament_name:
+                    resolved = resolve_course_name(next_tournament_name)
+                    if resolved and resolved != next_tournament_name:
                         course = resolved
-                        print(f"  Auto-detected course from tournament name '{name}': {course}")
+                        print(f"  Resolved '{next_tournament_name}' → {course}")
                     else:
-                        print(f"  [warn] Could not map '{name}' to a course — DataGolf will use its default")
+                        print(f"  [warn] Could not map '{next_tournament_name}' to a course")
             except Exception:
                 pass
 
     if not course:
-        # DataGolf's course fit tool always defaults to the current week's tour stop.
-        # Pass empty string — fetch_datagolf will use whatever DataGolf shows.
-        print("  No course determined — letting DataGolf show its current default")
+        print("ERROR: No course resolved — cannot produce accurate course fit data.")
+        print("  Add the upcoming tournament to TOURNAMENT_TO_COURSE in pipeline/courses.py")
+        sys.exit(1)
 
     data = fetch_datagolf(course)
+
+    # Fail loudly if DataGolf showed a different course than requested
+    course_mismatch_notes = [n for n in data.get("notes", []) if "Course fit page showed" in n]
+    if course_mismatch_notes:
+        print("\nERROR: DataGolf course fit data is for the wrong course:")
+        for note in course_mismatch_notes:
+            print(f"  ! {note}")
+        sys.exit(1)
 
     output = DATA_DIR / "datagolf_data.json"
     output.write_text(json.dumps(data, indent=2))

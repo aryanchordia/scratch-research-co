@@ -393,6 +393,60 @@ def extract_picks_from_article(article_body: str) -> list[str]:
     return picks[:5]
 
 
+# ─── Pre-flight validation ────────────────────────────────────────────────────
+
+def _preflight_check(tournament_data: dict) -> None:
+    """
+    Abort with a clear message if essential data is missing.
+    Better to skip a week than ship an article admitting its own data is garbled.
+    """
+    errors = []
+
+    completed = tournament_data.get("completed_events", [])
+    if not completed:
+        errors.append("No completed events found — nothing to recap.")
+    else:
+        event = completed[0]
+        winner_name = event.get("winner", {}).get("name", "")
+        if not winner_name:
+            errors.append(
+                f"Completed event '{event.get('name')}' has no winner name. "
+                "ESPN may not have returned competitor data (team event or API change)."
+            )
+        named_entries = [e for e in event.get("leaderboard", []) if e.get("name")]
+        if len(named_entries) < 5:
+            errors.append(
+                f"Leaderboard for '{event.get('name')}' has fewer than 5 named entries "
+                f"({len(named_entries)} found). ESPN competitor parsing may have failed."
+            )
+
+    next_t = tournament_data.get("next_tournament", {})
+    if not next_t.get("venue"):
+        errors.append(
+            f"Next tournament '{next_t.get('name', 'unknown')}' has no resolved venue/course. "
+            "Add it to TOURNAMENT_TO_COURSE in pipeline/courses.py."
+        )
+
+    datagolf_file = Path(__file__).parent.parent / "data" / "datagolf_data.json"
+    if datagolf_file.exists():
+        dg = json.loads(datagolf_file.read_text())
+        dg_course = dg.get("course", "")
+        expected_course = next_t.get("venue", "")
+        if expected_course and dg_course and dg_course.lower() != expected_course.lower():
+            errors.append(
+                f"DataGolf course mismatch: expected '{expected_course}', "
+                f"got '{dg_course}'. Course fit data is for the wrong course."
+            )
+
+    if errors:
+        print("\nERROR: Pre-flight data validation failed — aborting article generation.")
+        for e in errors:
+            print(f"  ✗ {e}")
+        sys.exit(1)
+
+    print("✓ Pre-flight data validation passed.")
+
+
 # ─── Entry point ─────────────────────────────────────────────────────────────
 
 def main():
@@ -404,6 +458,10 @@ def main():
         sys.exit(1)
 
     tournament_data = json.loads(data_file.read_text())
+
+    # Pre-flight validation — fail loudly rather than generating a garbled article
+    _preflight_check(tournament_data)
+
     picks_history = load_picks_history()
 
     print("Building prompt from tournament data...")
