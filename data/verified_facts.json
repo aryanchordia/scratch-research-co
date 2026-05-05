@@ -1,64 +1,43 @@
 {
   "players": {
-    "Branden Grace": {
-      "player": "Branden Grace",
-      "wiki_summary": "Branden John Grace is a South African professional golfer. He currently plays for LIV Golf. Grace formerly played on the European Tour, the PGA Tour, and the Sunshine Tour. In 2012, he became the first player in the history of the European Tour to win his first four European Tour titles in the same year. In 2017, Grace recorded the lowest score ever in a major championship when he shot a 62 in the Open Championship.",
+    "Adam Scott": {
+      "player": "Adam Scott",
+      "wiki_summary": "Adam Paul Scott is an American actor and comedian. He is best known for his role as Ben Wyatt in the NBC sitcom Parks and Recreation (2010\u20132015), for which he was twice nominated for a Critics' Choice Television Award, as well as Mark Scout in the Apple TV+ sci-fi thriller series Severance, for which he was nominated for four Primetime Emmy Awards \u2013 two for acting and two for producing \u2013 and two Golden Globe Awards.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Bud Cauley": {
-      "player": "Bud Cauley",
-      "wiki_summary": "William Carl \"Bud\" Cauley III is an American professional golfer.",
+    "Alex Fitzpatrick": {
+      "player": "Alex Fitzpatrick",
+      "wiki_summary": "Alex Fitzpatrick is an English professional golfer who currently plays on the PGA Tour and the European Tour.\nHe is also the younger brother of Matt Fitzpatrick.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Cameron Tringale": {
-      "player": "Cameron Tringale",
-      "wiki_summary": "Cameron Joseph Tringale is an American professional golfer. Born in Mission Viejo, California, Tringale was a three-time NCAA All-American at Georgia Tech. He was a member of the PGA Tour from 2010 until 2022, when he resigned his membership and joined LIV Golf.",
+    "Alex Noren": {
+      "player": "Alex Noren",
+      "wiki_summary": "Alexander Nor\u00e9n is a Swedish professional golfer who plays on the PGA Tour and the European Tour. He has won twelve tournaments on the European Tour, including the BMW PGA Championship, the Aberdeen Asset Management Scottish Open, the British Masters, HNA Open de France and the Nedbank Golf Challenge. He was a member of the winning 2018 European Ryder Cup team.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Collin Morikawa": {
-      "player": "Collin Morikawa",
-      "wiki_summary": "Collin Morikawa is an American professional golfer who plays on the PGA Tour. He began his PGA Tour career with 22 consecutive made cuts, second only to Tiger Woods' 25-cut streak. Morikawa has seven PGA Tour wins \u2013 including two major championships, the 2020 PGA Championship and the 2021 Open Championship, winning both in his debut. In May 2018, Morikawa spent three weeks as the top-ranked golfer in the World Amateur Golf Ranking. He also became the first American to win the Race to Dubai on the European Tour.",
-      "major_wins_mentioned": "two major",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "David Puig": {
-      "player": "David Puig",
-      "wiki_summary": "David Puig Currius is a Spanish professional golfer who plays on the European Tour and the LIV Golf League. He cut short his college career at Arizona State University to join LIV Golf in 2022 but completed his last year online in 2023, which he shared in an Instagram post.",
+    "Alex Smalley": {
+      "player": "Alex Smalley",
+      "wiki_summary": "Alex Anthony Smalley is an American professional golfer who plays on the PGA Tour.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Gary Woodland": {
-      "player": "Gary Woodland",
-      "wiki_summary": "Gary Lynn Woodland is an American professional golfer who plays on the PGA Tour. He has won one major championship, the 2019 U.S. Open.",
-      "major_wins_mentioned": "one major",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Harris English": {
-      "player": "Harris English",
-      "wiki_summary": "Harris English is an American professional golfer and currently a member of the PGA Tour.",
+    "Ben Griffin": {
+      "player": "Ben Griffin",
+      "wiki_summary": "Ben or Benjamin Griffin may refer to:Ben Griffin, former British SAS soldier and anti-war activist\nBen Griffin (soccer), Australian football (soccer) player\nBen Griffin (golfer), American professional golfer\nBen Hill Griffin Jr. (1910\u20131990), Florida politician\nBenjamin Griffin (actor) (1680\u20131740), dramatist and actor\nBenjamin Griffin, New Zealand skier\nBenjamin S. Griffin, U.S. Army general\n",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Jon Rahm": {
-      "player": "Jon Rahm",
-      "wiki_summary": "Jon Rahm Rodr\u00edguez  is a Spanish professional golfer who plays on the LIV Golf League. He is a former world number one in the Official World Golf Ranking. Rahm has won two major championships, the 2021 U.S. Open and 2023 Masters Tournament.",
-      "major_wins_mentioned": "two major",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Josele Ballester": {
-      "player": "Josele Ballester",
-      "wiki_summary": "Jos\u00e9 Luis \"Josele\" Ballester Barrio is a Spanish professional golfer who plays on LIV Golf. He won the 2020 Spanish Amateur, 2023 European Amateur and 2024 U.S. Amateur.",
+    "Cameron Young": {
+      "player": "Cameron Young",
+      "wiki_summary": "Cameron Young is an American professional golfer who plays on the PGA Tour, where he has won two titles.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
@@ -70,41 +49,6 @@
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Ludvig \u00c5berg": {
-      "player": "Ludvig \u00c5berg",
-      "wiki_summary": "Ludvig Noa \u00c5berg is a Swedish professional golfer who plays on the PGA Tour and the European Tour.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Matt Fitzpatrick": {
-      "player": "Matt Fitzpatrick",
-      "wiki_summary": "Matthew Thomas Fitzpatrick is an English professional golfer. After winning the 2013 U.S. Amateur, he later won his first professional tournament at the 2015 British Masters. In 2022, he earned his first PGA Tour victory and first major championship at the U.S. Open. In 2023, he won the RBC Heritage at Harbour Town Golf Links, his second PGA Tour victory. His third PGA Tour victory was earned at the 2026 Valspar Championship.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Matthew Wolff": {
-      "player": "Matthew Wolff",
-      "wiki_summary": "Matthew Brandyn Wolff is an American professional golfer. He was an NCAA All-American at Oklahoma State University, and won the 2019 NCAA Division I individual championship. Wolff picked up his first win on the PGA Tour at the 2019 3M Open. He joined LIV Golf in 2022.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Rickie Fowler": {
-      "player": "Rickie Fowler",
-      "wiki_summary": "Rick Yutaka Fowler is an American professional golfer who plays on the PGA Tour. He was the number one ranked amateur golfer in the world for 36 weeks in 2007 and 2008. On January 24, 2016, he reached a career high fourth in the Official World Golf Ranking following his victory in the Abu Dhabi HSBC Golf Championship. He is one of only four golfers to shoot 62 in a major championship, achieving the feat at the 2023 U.S. Open, played at the Los Angeles Country Club.",
-      "major_wins_mentioned": "62 in a major",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Scott Vincent": {
-      "player": "Scott Vincent",
-      "wiki_summary": "Scott Vincent was an American radio and television announcer and newscaster.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
     "Scottie Scheffler": {
       "player": "Scottie Scheffler",
       "wiki_summary": "Scott Alexander Scheffler is an American professional golfer who plays on the PGA Tour. He is currently ranked world number one in the Official World Golf Ranking, a position he has held for over 175 weeks during his career. He has won four major championships.",
@@ -112,46 +56,25 @@
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
+    "Sepp Straka": {
+      "player": "Sepp Straka",
+      "wiki_summary": "Josef \"Sepp\" Straka is an Austrian professional golfer who plays on the PGA Tour, where he has won four titles.",
+      "major_wins_mentioned": "not specified",
+      "has_career_grand_slam": false,
+      "source": "wikipedia"
+    },
     "Si Woo Kim": {
       "player": "Si Woo Kim",
-      "wiki_summary": "Kim Si-woo, also known as Si Woo Kim, is a South Korean professional golfer who plays on the PGA Tour. He won the 2017 Players Championship to become the youngest ever winner of the event at age 21.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Thomas Detry": {
-      "player": "Thomas Detry",
-      "wiki_summary": "Thomas Detry is a Belgian professional golfer who plays on the European Tour and the LIV Golf League. He was a highly ranked amateur golfer before turning professional. In his first professional win at the Bridgestone Challenge, he set Challenge Tour records for largest margin of victory and tied for lowest score under-par with Iv\u00f3 Giner. In 2025, he became the first Belgian to win on the PGA Tour when he won the WM Phoenix Open by seven shots.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Tom McKibbin": {
-      "player": "Tom McKibbin",
-      "wiki_summary": "Thomas Robert McKibbin was an Australian cricketer who played in five Test matches from 1895 to 1898.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
-    },
-    "Tyrrell Hatton": {
-      "player": "Tyrrell Hatton",
-      "wiki_summary": "Tyrrell Glen Hatton is an English professional golfer. He has played on the European Tour and the PGA Tour, winning eight times on the former, including five Rolex Series events. He also has one win on the PGA Tour at the 2020 Arnold Palmer Invitational, and has played on four Ryder Cup teams, winning three times. In 2024, he joined LIV Golf as a member of Jon Rahm's Legion XIII GC.",
+      "wiki_summary": "Kim Si-woo, also known as Si Woo Kim, is a South Korean professional golfer who plays on the PGA Tour. He won the 2017 Players Championship, becoming the youngest ever winner of the event at age 21.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     }
   },
   "tournaments": {
-    "RBC Heritage": {
-      "tournament": "RBC Heritage",
-      "tournament_wiki": "The RBC Heritage, known for much of its history as the Heritage Classic or simply The Heritage, is a PGA Tour event in South Carolina, first played 57\u00a0years ago in 1969. It is currently played in mid-April, the week after The Masters in Augusta, Georgia.",
-      "course_wiki": "",
-      "back_to_back_context": "The Masters Tournament is one of the four men's major championships in professional golf. Scheduled for the first full week in April, the Masters is the first major golf tournament of the year. Unlike the other major tournaments which change host venues with each tournament, the Masters is always held at the same host venue: Augusta National Golf Club, a private course in the city of Augusta, Geor",
-      "source": "wikipedia"
-    },
-    "LIV Golf Mexico City": {
-      "tournament": "LIV Golf Mexico City",
-      "tournament_wiki": "The LIV Golf Mexico City is a professional golf tournament sponsored by LIV Golf in Mexico, held at Playa del Carmen, south of Canc\u00fan. It debuted in February 2023. The first event was also co-sponsored by the MENA Tour.",
+    "Cadillac Championship": {
+      "tournament": "Cadillac Championship",
+      "tournament_wiki": "",
       "course_wiki": "",
       "back_to_back_context": "The Masters Tournament is one of the four men's major championships in professional golf. Scheduled for the first full week in April, the Masters is the first major golf tournament of the year. Unlike the other major tournaments which change host venues with each tournament, the Masters is always held at the same host venue: Augusta National Golf Club, a private course in the city of Augusta, Geor",
       "source": "wikipedia"
