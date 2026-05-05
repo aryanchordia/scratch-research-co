@@ -55,6 +55,7 @@ COURSE_NAME_MAP: dict[str, str] = {
 TOURNAMENT_TO_COURSE: dict[str, str] = {
     "zurich classic": "TPC Louisiana",
     "wells fargo": "Quail Hollow Club",
+    "truist championship": "Quail Hollow Club",
     "pga championship": "Quail Hollow Club",
     "charles schwab": "Colonial Country Club",
     "memorial": "Muirfield Village Golf Club",
