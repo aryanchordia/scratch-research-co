@@ -1,3 +1,73 @@
 {
-  "scored_weeks": []
+  "scored_weeks": [
+    {
+      "tournament": "Zurich Classic of New Orleans",
+      "start_date": "2026-04-24",
+      "article_file": "src/content/articles/2026/2026-04-20-rbc-heritage.mdx",
+      "picks": [
+        {
+          "player": "Scottie Scheffler & Sam Burns",
+          "result": "miss",
+          "note": "Not in top results"
+        },
+        {
+          "player": "Collin Morikawa & Kurt Kitayama",
+          "result": "miss",
+          "note": "Not in top results"
+        },
+        {
+          "player": "Sahith Theegala & Tom Kim",
+          "result": "miss",
+          "note": "Not in top results"
+        },
+        {
+          "player": "Harris English & Brian Harman",
+          "result": "miss",
+          "note": "Not in top results"
+        },
+        {
+          "player": "Jason Day & Min Woo Lee",
+          "result": "miss",
+          "note": "Not in top results"
+        }
+      ],
+      "leaderboard_top5": [
+        {
+          "position": 1,
+          "position_display": "T1",
+          "name": "Smalley/Springer",
+          "score": "-30",
+          "made_cut": true
+        },
+        {
+          "position": 2,
+          "position_display": "T1",
+          "name": "Reitan/Ventura",
+          "score": "-30",
+          "made_cut": true
+        },
+        {
+          "position": 3,
+          "position_display": "T3",
+          "name": "Martin/Crowe",
+          "score": "-28",
+          "made_cut": true
+        },
+        {
+          "position": 4,
+          "position_display": "T3",
+          "name": "Neergaard-Petersen/Olesen",
+          "score": "-28",
+          "made_cut": true
+        },
+        {
+          "position": 5,
+          "position_display": "T5",
+          "name": "Thompson/Eckroat",
+          "score": "-27",
+          "made_cut": true
+        }
+      ]
+    }
+  ]
 }

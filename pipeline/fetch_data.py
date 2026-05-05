@@ -24,6 +24,8 @@ import urllib.parse
 import urllib.error
 from pathlib import Path
 
+from courses import resolve_course
+
 DATA_DIR = Path(__file__).parent.parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
 
@@ -113,37 +115,49 @@ def parse_espn_event(data: dict) -> dict | None:
     event = events[0]
     competition = event.get("competitions", [{}])[0]
 
-    # Venue
-    venue = competition.get("venue", {})
-    venue_name = venue.get("fullName", "")
-    city = venue.get("address", {}).get("city", "")
-    state = venue.get("address", {}).get("state", "")
+    # Venue — ESPN often returns None or {} here, so be defensive
+    venue = competition.get("venue") or {}
+    venue_name = venue.get("fullName", "") if isinstance(venue, dict) else ""
+    city = venue.get("address", {}).get("city", "") if isinstance(venue, dict) else ""
+    state = venue.get("address", {}).get("state", "") if isinstance(venue, dict) else ""
 
-    # Competitors / leaderboard
+    # Competitors / leaderboard — handle both singles (athlete) and team events (team)
     competitors = competition.get("competitors", [])
+    is_team_event = competitors and "athlete" not in competitors[0] and "team" in competitors[0]
     leaderboard = []
     for c in competitors[:20]:
-        athlete = c.get("athlete", {})
         stats = c.get("statistics", [])
         score = next((s.get("displayValue") for s in stats if s.get("name") == "score"), "")
+        if is_team_event:
+            team = c.get("team", {})
+            display_name = team.get("displayName", "")
+            country = ""
+        else:
+            athlete = c.get("athlete", {})
+            display_name = athlete.get("displayName", "")
+            country = athlete.get("flag", {}).get("alt", "")
         leaderboard.append({
             "position": c.get("status", {}).get("position", {}).get("displayName", ""),
-            "name": athlete.get("displayName", ""),
-            "country": athlete.get("flag", {}).get("alt", ""),
+            "name": display_name,
+            "country": country,
             "score": score,
             "rounds": [r.get("displayValue") for r in c.get("linescores", [])],
         })
 
     winner = leaderboard[0] if leaderboard else {}
 
+    tournament_name = event.get("name", "")
+    resolved_course = resolve_course(tournament_name, venue_name)
+
     return {
         "id": event.get("id"),
-        "name": event.get("name", ""),
+        "name": tournament_name,
         "shortName": event.get("shortName", ""),
         "status": competition.get("status", {}).get("type", {}).get("name", ""),
         "startDate": event.get("date", ""),
+        "format": "team" if is_team_event else "singles",
         "venue": {
-            "name": venue_name,
+            "name": resolved_course or venue_name,
             "city": city,
             "state": state,
         },
@@ -172,17 +186,18 @@ def fetch_next_tournament(tour_slug: str) -> dict | None:
             # Skip already-completed events (the one we just covered)
             if status in ("STATUS_FINAL", "STATUS_COMPLETE", "Completed"):
                 continue
-            venue = event.get("competitions", [{}])[0].get("venue", {})
-            venue_name = venue.get("fullName", "")
-            city = venue.get("address", {}).get("city", "")
+            venue_obj = event.get("competitions", [{}])[0].get("venue") or {}
+            venue_name = venue_obj.get("fullName", "") if isinstance(venue_obj, dict) else ""
+            city = venue_obj.get("address", {}).get("city", "") if isinstance(venue_obj, dict) else ""
             event_name = event.get("name", "")
             event_date = event.get("date", "")[:10]
             if event_name:
+                resolved = resolve_course(event_name, venue_name)
                 return {
                     "name": event_name,
                     "shortName": event.get("shortName", ""),
                     "date": event_date,
-                    "venue": venue_name,  # may be empty; fetch_datagolf resolves from name
+                    "venue": resolved or venue_name,
                     "city": city,
                 }
     return None
@@ -208,7 +223,7 @@ def build_tournament_data(tours: list[str]) -> dict:
     print("\n=== Scratch Research Co. — Data Fetch ===\n")
 
     result = {
-        "generated_at": datetime.datetime.utcnow().isoformat() + "Z",
+        "generated_at": datetime.datetime.now(datetime.UTC).isoformat(),
         "tours": {},
         "completed_events": [],
         "upcoming_events": [],
@@ -217,7 +232,7 @@ def build_tournament_data(tours: list[str]) -> dict:
 
     tour_map = {
         "pga": ("PGA Tour", "pga"),
-        "dp": ("DP World Tour", "european"),
+        "dp": ("DP World Tour", "eur"),
         "liv": ("LIV Golf", "liv"),
     }
 

@@ -59,7 +59,7 @@ def fetch_espn_results(tournament_name: str, start_date_str: str) -> list[dict]:
     # Try Sunday (start+3), then Mon (start+4) in case of playoff
     candidate_dates = [start + datetime.timedelta(days=d) for d in (3, 4, 2)]
 
-    for slug in ("pga", "european", "liv"):
+    for slug in ("pga", "eur", "liv"):
         for date in candidate_dates:
             url = f"{ESPN_BASE}/{slug}/scoreboard?dates={date.strftime('%Y%m%d')}"
             data = fetch_json(url)
@@ -80,27 +80,60 @@ def fetch_espn_results(tournament_name: str, start_date_str: str) -> list[dict]:
 
                 print(f"  ✓ Found final results: {name} (ESPN slug={slug})")
                 competitors = event.get("competitions", [{}])[0].get("competitors", [])
+                # Detect team event (team key, no athlete key)
+                is_team = competitors and "team" in competitors[0] and "athlete" not in competitors[0]
+
+                # Build score→order list to detect ties for display position
+                score_order: list[tuple[int, str]] = []
+                for c in competitors:
+                    try:
+                        score_order.append((int(c.get("order", 9999)), c.get("score", "")))
+                    except (TypeError, ValueError):
+                        score_order.append((9999, ""))
+
+                # Group orders by score to compute T-prefix display positions
+                score_to_first_order: dict[str, int] = {}
+                for order, sc in score_order:
+                    if sc not in score_to_first_order:
+                        score_to_first_order[sc] = order
+
                 leaderboard = []
                 for c in competitors:
-                    athlete = c.get("athlete", {})
+                    if is_team:
+                        display_name = c.get("team", {}).get("displayName", "")
+                    else:
+                        display_name = c.get("athlete", {}).get("displayName", "")
+
+                    # Position: prefer status.position.id (live events), fall back to order (completed)
                     pos_obj = c.get("status", {}).get("position", {})
-                    pos = pos_obj.get("id", 999)
+                    pos_raw = pos_obj.get("id")
                     try:
-                        pos = int(str(pos).lstrip("T"))
-                    except ValueError:
+                        pos = int(str(pos_raw).lstrip("T")) if pos_raw else int(c.get("order", 999))
+                    except (TypeError, ValueError):
                         pos = 999
 
+                    # Score: prefer statistics array (live), fall back to competitor-level score (completed)
                     stats = c.get("statistics", [])
-                    score = next((s.get("displayValue") for s in stats if s.get("name") == "score"), "--")
-                    pos_display = pos_obj.get("displayName", str(pos))
+                    score = next((s.get("displayValue") for s in stats if s.get("name") == "score"), None)
+                    if not score:
+                        score = c.get("score", "--") or "--"
 
-                    # Check if missed cut
-                    made_cut = c.get("status", {}).get("type", {}).get("name", "") not in ("STATUS_CUT", "CUT")
+                    # Display position with tie prefix
+                    pos_display = pos_obj.get("displayName", "")
+                    if not pos_display:
+                        sc = c.get("score", "")
+                        first = score_to_first_order.get(sc, pos)
+                        tied = sum(1 for _, s in score_order if s == sc) > 1
+                        pos_display = f"T{first}" if tied else str(first)
+
+                    # Cut status: use status.type.name when present
+                    cut_name = c.get("status", {}).get("type", {}).get("name", "")
+                    made_cut = cut_name not in ("STATUS_CUT", "CUT")
 
                     leaderboard.append({
                         "position": pos,
                         "position_display": pos_display,
-                        "name": athlete.get("displayName", ""),
+                        "name": display_name,
                         "score": score,
                         "made_cut": made_cut,
                     })
@@ -153,14 +186,40 @@ def _player_names_match(pick_name: str, espn_name: str) -> bool:
 
 # ─── Scoring ─────────────────────────────────────────────────────────────────
 
-def score_pick(player_name: str, leaderboard: list[dict]) -> tuple[str, str]:
+def _team_names_match(members: list[str], team_display: str) -> bool:
     """
-    Find player in leaderboard and return (result, note).
+    True when both halves of a pair pick appear in the ESPN team name.
+    ESPN uses "Lastname/Lastname" format; we check normalized last names.
+    """
+    normalized_team = _normalize(team_display)
+    for member in members:
+        # Use only the last name for matching
+        last = _normalize(member).split()[-1] if _normalize(member).split() else ""
+        if last and last not in normalized_team:
+            return False
+    return True
+
+
+def score_pick(
+    player_name: str,
+    leaderboard: list[dict],
+    members: list[str] | None = None,
+) -> tuple[str, str]:
+    """
+    Find player (or team pair) in leaderboard and return (result, note).
     result: 'win' | 'top5' | 'top10' | 'top20' | 'miss'
     note:   e.g. 'Won (-15)' or 'T4 (-8)' or 'T23 (+1)' or 'MC'
+
+    For team events pass members=[name1, name2]; matched via last-name check
+    against ESPN's "Lastname1/Lastname2" display format.
     """
     for entry in leaderboard:
-        if _player_names_match(player_name, entry["name"]):
+        matched = (
+            _team_names_match(members, entry["name"])
+            if members
+            else _player_names_match(player_name, entry["name"])
+        )
+        if matched:
             pos = entry["position"]
             pos_display = entry["position_display"]
             score = entry["score"]
@@ -206,7 +265,12 @@ def parse_frontmatter_picks(content: str) -> list[dict]:
         player = block[0].strip()
         result = block[1].strip()
         note = block[2].strip() if block[2] else None
-        picks.append({"player": player, "result": result, "note": note})
+        pick: dict = {"player": player, "result": result, "note": note}
+        # Detect team picks — "Player A & Player B" or "Player A / Player B"
+        if " & " in player or " / " in player:
+            sep = " & " if " & " in player else " / "
+            pick["members"] = [p.strip() for p in player.split(sep)]
+        picks.append(pick)
 
     return picks
 
@@ -348,7 +412,7 @@ def main():
                 scored_picks.append(pick)
                 continue
 
-            result, note = score_pick(pick["player"], leaderboard)
+            result, note = score_pick(pick["player"], leaderboard, pick.get("members"))
             scored_picks.append({"player": pick["player"], "result": result, "note": note})
             icon = {"win": "🏆", "top5": "✓", "top10": "~", "top20": "~", "miss": "✗"}.get(result, "?")
             print(f"    {icon} {pick['player']:25} → {result} ({note})")
