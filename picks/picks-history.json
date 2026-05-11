@@ -29,5 +29,36 @@
         "note": ""
       }
     ]
+  },
+  {
+    "tournament": "PGA Championship",
+    "date": "2026-05-11",
+    "picks": [
+      {
+        "player": "Rory McIlroy",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Ludvig \u00c5berg",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Xander Schauffele",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Nicolai H\u00f8jgaard",
+        "result": "pending",
+        "note": ""
+      },
+      {
+        "player": "Min Woo Lee",
+        "result": "pending",
+        "note": ""
+      }
+    ]
   }
 ]

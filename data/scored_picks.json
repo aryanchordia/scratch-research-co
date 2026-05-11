@@ -1,70 +1,70 @@
 {
   "scored_weeks": [
     {
-      "tournament": "Zurich Classic of New Orleans",
-      "start_date": "2026-04-24",
-      "article_file": "src/content/articles/2026/2026-04-20-rbc-heritage.mdx",
+      "tournament": "Truist Championship",
+      "start_date": "2026-05-07",
+      "article_file": "src/content/articles/2026/2026-05-04-cadillac-championship.mdx",
       "picks": [
         {
-          "player": "Scottie Scheffler & Sam Burns",
+          "player": "Cameron Young",
+          "result": "top20",
+          "note": "T10 (-9)"
+        },
+        {
+          "player": "Jake Knapp",
           "result": "miss",
           "note": "Not in top results"
         },
         {
-          "player": "Collin Morikawa & Kurt Kitayama",
+          "player": "Sam Burns",
+          "result": "miss",
+          "note": "T37 (-2)"
+        },
+        {
+          "player": "Nicolai Hojgaard",
           "result": "miss",
           "note": "Not in top results"
         },
         {
-          "player": "Sahith Theegala & Tom Kim",
-          "result": "miss",
-          "note": "Not in top results"
-        },
-        {
-          "player": "Harris English & Brian Harman",
-          "result": "miss",
-          "note": "Not in top results"
-        },
-        {
-          "player": "Jason Day & Min Woo Lee",
-          "result": "miss",
-          "note": "Not in top results"
+          "player": "Chris Gotterup",
+          "result": "top20",
+          "note": "T14 (-7)"
         }
       ],
       "leaderboard_top5": [
         {
           "position": 1,
-          "position_display": "T1",
-          "name": "Smalley/Springer",
-          "score": "-30",
+          "position_display": "1",
+          "name": "Kristoffer Reitan",
+          "score": "-15",
           "made_cut": true
         },
         {
           "position": 2,
-          "position_display": "T1",
-          "name": "Reitan/Ventura",
-          "score": "-30",
+          "position_display": "T2",
+          "name": "Rickie Fowler",
+          "score": "-13",
           "made_cut": true
         },
         {
           "position": 3,
-          "position_display": "T3",
-          "name": "Martin/Crowe",
-          "score": "-28",
+          "position_display": "T2",
+          "name": "Nicolai H\u00f8jgaard",
+          "score": "-13",
           "made_cut": true
         },
         {
           "position": 4,
-          "position_display": "T3",
-          "name": "Neergaard-Petersen/Olesen",
-          "score": "-28",
+          "position_display": "4",
+          "name": "Alex Fitzpatrick",
+          "score": "-12",
           "made_cut": true
         },
         {
           "position": 5,
           "position_display": "T5",
-          "name": "Thompson/Eckroat",
-          "score": "-27",
+          "name": "J.J. Spaun",
+          "score": "-11",
           "made_cut": true
         }
       ]
