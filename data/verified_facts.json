@@ -1,11 +1,9 @@
 {
   "players": {
-    "Adam Scott": {
-      "player": "Adam Scott",
-      "wiki_summary": "Adam Paul Scott is an American actor and comedian. He is best known for his role as Ben Wyatt in the NBC sitcom Parks and Recreation (2010\u20132015), for which he was twice nominated for a Critics' Choice Television Award, as well as Mark Scout in the Apple TV+ sci-fi thriller series Severance, for which he was nominated for four Primetime Emmy Awards \u2013 two for acting and two for producing \u2013 and two Golden Globe Awards.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
+    "Alejandro Del Rey": {
+      "player": "Alejandro Del Rey",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
     },
     "Alex Fitzpatrick": {
       "player": "Alex Fitzpatrick",
@@ -14,69 +12,179 @@
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Alex Noren": {
-      "player": "Alex Noren",
-      "wiki_summary": "Alexander Nor\u00e9n is a Swedish professional golfer who plays on the PGA Tour and the European Tour. He has won twelve tournaments on the European Tour, including the BMW PGA Championship, the Aberdeen Asset Management Scottish Open, the British Masters, HNA Open de France and the Nedbank Golf Challenge. He was a member of the winning 2018 European Ryder Cup team.",
+    "Anthony Kim": {
+      "player": "Anthony Kim",
+      "wiki_summary": "Anthony Ha-Jin Kim is an American professional golfer who plays on the LIV Golf League. He previously played on the PGA Tour, where he won three events, and appeared in the 2008 Ryder Cup and the 2009 Presidents Cup. He suffered an Achilles injury in 2012 and did not play professional golf again until 2024, when he signed a contract with LIV Golf. In 2026, Kim won the LIV Golf Adelaide tournament, which was his first professional victory since 2010.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Alex Smalley": {
-      "player": "Alex Smalley",
-      "wiki_summary": "Alex Anthony Smalley is an American professional golfer who plays on the PGA Tour.",
+    "Bryson DeChambeau": {
+      "player": "Bryson DeChambeau",
+      "wiki_summary": "Bryson James Aldrich DeChambeau is an American professional golfer who plays on the LIV Golf League. He formerly played on the PGA Tour, and has won two major championships, the 2020 and 2024 U.S. Open.",
+      "major_wins_mentioned": "two major",
+      "has_career_grand_slam": false,
+      "source": "wikipedia"
+    },
+    "Dan Bradbury": {
+      "player": "Dan Bradbury",
+      "wiki_summary": "Daniel John Bradbury is an English professional golfer who plays on the European Tour. He claimed his first win as a professional in his third European Tour start at the 2022 Joburg Open.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Ben Griffin": {
-      "player": "Ben Griffin",
-      "wiki_summary": "Ben or Benjamin Griffin may refer to:Ben Griffin, former British SAS soldier and anti-war activist\nBen Griffin (soccer), Australian football (soccer) player\nBen Griffin (golfer), American professional golfer\nBen Hill Griffin Jr. (1910\u20131990), Florida politician\nBenjamin Griffin (actor) (1680\u20131740), dramatist and actor\nBenjamin Griffin, New Zealand skier\nBenjamin S. Griffin, U.S. Army general\n",
+    "Dean Burmester": {
+      "player": "Dean Burmester",
+      "wiki_summary": "Dean Burmester is a South African professional golfer who plays in the LIV Golf League, as well as having status on the European Tour and Sunshine Tour. He formerly played on the PGA Tour.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Cameron Young": {
-      "player": "Cameron Young",
-      "wiki_summary": "Cameron Young is an American professional golfer who plays on the PGA Tour, where he has won two titles.",
+    "Harry Hall": {
+      "player": "Harry Hall",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "J.J. Spaun": {
+      "player": "J.J. Spaun",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "JC Ritchie": {
+      "player": "JC Ritchie",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Joaqu\u00edn Niemann": {
+      "player": "Joaqu\u00edn Niemann",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Jon Rahm": {
+      "player": "Jon Rahm",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Josele Ballester": {
+      "player": "Josele Ballester",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Kazuma Kobori": {
+      "player": "Kazuma Kobori",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Kiradech Aphibarnrat": {
+      "player": "Kiradech Aphibarnrat",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Kristoffer Reitan": {
+      "player": "Kristoffer Reitan",
+      "wiki_summary": "Kristoffer Reitan is a Norwegian professional golfer who plays on the European Tour. In 2018, he become the first Norwegian to play in the U.S. Open. He won the 2024 Rolex Challenge Tour Grand Final and the 2025 Belgian Open and the 2026 Truist Championship.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Kurt Kitayama": {
-      "player": "Kurt Kitayama",
-      "wiki_summary": "Kurt Shun Kitayama is an American professional golfer who plays on the PGA Tour. On the European Tour, he won the AfrAsia Bank Mauritius Open in December 2018 and the Oman Open in March 2019. In March 2023, he won the Arnold Palmer Invitational on the PGA Tour. In July 2025, he won the 3M Open tournament for his second PGA Tour victory.",
+    "Lucas Herbert": {
+      "player": "Lucas Herbert",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Ludvig \u00c5berg": {
+      "player": "Ludvig \u00c5berg",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Martin Couvra": {
+      "player": "Martin Couvra",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Nicolai H\u00f8jgaard": {
+      "player": "Nicolai H\u00f8jgaard",
+      "wiki_summary": "Nicolai H\u00f8jgaard is a Danish professional golfer who currently plays on the PGA Tour and European Tour. In 2021, he and his twin brother, Rasmus, became the first brothers to win in back-to-back weeks on the European Tour. He also was part of the winning European 2023 Ryder Cup team.",
       "major_wins_mentioned": "not specified",
       "has_career_grand_slam": false,
       "source": "wikipedia"
     },
-    "Scottie Scheffler": {
-      "player": "Scottie Scheffler",
-      "wiki_summary": "Scott Alexander Scheffler is an American professional golfer who plays on the PGA Tour. He is currently ranked world number one in the Official World Golf Ranking, a position he has held for over 175 weeks during his career. He has won four major championships.",
-      "major_wins_mentioned": "four major",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
+    "Oihan Guillamoundeguy": {
+      "player": "Oihan Guillamoundeguy",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
     },
-    "Sepp Straka": {
-      "player": "Sepp Straka",
-      "wiki_summary": "Josef \"Sepp\" Straka is an Austrian professional golfer who plays on the PGA Tour, where he has won four titles.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
+    "Patrick Cantlay": {
+      "player": "Patrick Cantlay",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
     },
-    "Si Woo Kim": {
-      "player": "Si Woo Kim",
-      "wiki_summary": "Kim Si-woo, also known as Si Woo Kim, is a South Korean professional golfer who plays on the PGA Tour. He won the 2017 Players Championship, becoming the youngest ever winner of the event at age 21.",
-      "major_wins_mentioned": "not specified",
-      "has_career_grand_slam": false,
-      "source": "wikipedia"
+    "Rafa Cabrera Bello": {
+      "player": "Rafa Cabrera Bello",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Rickie Fowler": {
+      "player": "Rickie Fowler",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Scott Vincent": {
+      "player": "Scott Vincent",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Sergio Garc\u00eda": {
+      "player": "Sergio Garc\u00eda",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Shaun Norris": {
+      "player": "Shaun Norris",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Sungjae Im": {
+      "player": "Sungjae Im",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Thomas Detry": {
+      "player": "Thomas Detry",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Tommy Fleetwood": {
+      "player": "Tommy Fleetwood",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
+    },
+    "Yurav Premlall": {
+      "player": "Yurav Premlall",
+      "facts": "No verified Wikipedia entry found.",
+      "source": "none"
     }
   },
   "tournaments": {
-    "Cadillac Championship": {
-      "tournament": "Cadillac Championship",
+    "Truist Championship": {
+      "tournament": "Truist Championship",
+      "tournament_wiki": "The Truist Championship is a professional golf tournament in North Carolina on the PGA Tour. Held in early May, usually at the Quail Hollow Club in Charlotte, it has attracted some of the top players on the tour. It debuted in 2003 as the Wachovia Championship, was known in 2009 and 2010 as the Quail Hollow Championship, from 2011 to 2024 as the Wells Fargo Championship and became the Truist Championship in 2025.",
+      "course_wiki": "Quail Hollow Club is a country club and golf course located in the Quail Hollow neighborhood in Charlotte, North Carolina, United States. It is a private member club founded in 1959, with the golf course opened in 1961.",
+      "back_to_back_context": "",
+      "source": "wikipedia"
+    },
+    "Estrella Damm Catalunya Championship": {
+      "tournament": "Estrella Damm Catalunya Championship",
+      "tournament_wiki": "The Catalunya Championship is a professional golf tournament held in Catalonia, Spain. It first appeared on the European Tour schedule in 2022.",
+      "course_wiki": "",
+      "back_to_back_context": "",
+      "source": "wikipedia"
+    },
+    "LIV Golf Virginia": {
+      "tournament": "LIV Golf Virginia",
       "tournament_wiki": "",
       "course_wiki": "",
-      "back_to_back_context": "The Masters Tournament is one of the four men's major championships in professional golf. Scheduled for the first full week in April, the Masters is the first major golf tournament of the year. Unlike the other major tournaments which change host venues with each tournament, the Masters is always held at the same host venue: Augusta National Golf Club, a private course in the city of Augusta, Geor",
+      "back_to_back_context": "",
       "source": "wikipedia"
     }
   },
